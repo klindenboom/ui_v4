@@ -6,8 +6,8 @@ import MainCard from 'ui-component/cards/MainCard';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
-const SamplePage = () => (
-    <MainCard title="Sample Card">
+const PlanBuilder = () => (
+    <MainCard title="Plan Builder!">
         <Typography variant="body2">
             Lorem ipsum dolor sit amen, consenter nipissing eli, sed do elusion tempos incident ut laborers et doolie magna alissa. Ut enif
             ad minim venice, quin nostrum exercitation illampu laborings nisi ut liquid ex ea commons construal. Duos aube grue dolor in
@@ -17,4 +17,4 @@ const SamplePage = () => (
     </MainCard>
 );
 
-export default SamplePage;
+export default PlanBuilder;

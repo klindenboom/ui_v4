@@ -55,7 +55,7 @@ const MenuList = () => {
                     return (
                         <List key={item.id}>
                             <NavItem item={item} level={1} isParents setSelectedID={() => setSelectedID('')} />
-                            {!isHorizontal && index !== 0 && <Divider sx={{ py: 0.5 }} />}
+                            {/* {!isHorizontal && index !== 0 && <Divider sx={{ py: 0.5 }} />} */}
                         </List>
                     );
                 }
