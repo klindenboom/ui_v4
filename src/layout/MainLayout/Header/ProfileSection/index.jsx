@@ -30,7 +30,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
-import UpgradePlanCard from './UpgradePlanCard';
 import useAuth from 'hooks/useAuth';
 import User1 from 'assets/images/users/user-round.svg';
 import { ThemeMode } from 'config';
@@ -118,21 +117,7 @@ const ProfileSection = () => {
                         lineHeight: 0
                     }
                 }}
-                icon={
-                    <Avatar
-                        src={User1}
-                        alt="user-images"
-                        sx={{
-                            ...theme.typography.mediumAvatar,
-                            margin: '8px 0 8px 8px !important',
-                            cursor: 'pointer'
-                        }}
-                        ref={anchorRef}
-                        aria-controls={open ? 'menu-list-grow' : undefined}
-                        aria-haspopup="true"
-                        color="inherit"
-                    />
-                }
+                
                 label={<IconSettings stroke={1.5} size="24px" />}
                 variant="outlined"
                 ref={anchorRef}
@@ -175,40 +160,21 @@ const ProfileSection = () => {
                                                 </Stack>
                                                 <Typography variant="subtitle2">Project Admin</Typography>
                                             </Stack>
-                                            <OutlinedInput
-                                                sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}
-                                                id="input-search-profile"
-                                                value={value}
-                                                onChange={(e) => setValue(e.target.value)}
-                                                placeholder="Search profile options"
-                                                startAdornment={
-                                                    <InputAdornment position="start">
-                                                        <IconSearch stroke={1.5} size="16px" />
-                                                    </InputAdornment>
-                                                }
-                                                aria-describedby="search-helper-text"
-                                                inputProps={{
-                                                    'aria-label': 'weight'
-                                                }}
-                                            />
-                                            <Divider />
                                         </Box>
                                         <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
                                             <Box sx={{ p: 2, pt: 0 }}>
-                                                <UpgradePlanCard />
-                                                <Divider />
                                                 <Card sx={{ bgcolor: mode === ThemeMode.DARK ? 'dark.800' : 'primary.light', my: 2 }}>
                                                     <CardContent>
                                                         <Grid container spacing={3} direction="column">
                                                             <Grid item>
                                                                 <Grid item container alignItems="center" justifyContent="space-between">
                                                                     <Grid item>
-                                                                        <Typography variant="subtitle1">Start DND Mode</Typography>
+                                                                        <Typography variant="subtitle1">Sync account data</Typography>
                                                                     </Grid>
                                                                     <Grid item>
                                                                         <Switch
                                                                             color="primary"
-                                                                            checked={sdm}
+                                                                            checked={true}
                                                                             onChange={(e) => setSdm(e.target.checked)}
                                                                             name="sdm"
                                                                             size="small"
@@ -261,34 +227,7 @@ const ProfileSection = () => {
                                                             }
                                                         />
                                                     </ListItemButton>
-                                                    <ListItemButton
-                                                        sx={{ borderRadius: `${borderRadius}px` }}
-                                                        selected={selectedIndex === 1}
-                                                        onClick={(event) => handleListItemClick(event, 1)}
-                                                    >
-                                                        <ListItemIcon>
-                                                            <IconUser stroke={1.5} size="20px" />
-                                                        </ListItemIcon>
-                                                        <ListItemText
-                                                            primary={
-                                                                <Grid container spacing={1} justifyContent="space-between">
-                                                                    <Grid item>
-                                                                        <Typography variant="body2">
-                                                                            <FormattedMessage id="social-profile" />
-                                                                        </Typography>
-                                                                    </Grid>
-                                                                    <Grid item>
-                                                                        <Chip
-                                                                            label="02"
-                                                                            size="small"
-                                                                            color="warning"
-                                                                            sx={{ '& .MuiChip-label': { mt: 0.25 } }}
-                                                                        />
-                                                                    </Grid>
-                                                                </Grid>
-                                                            }
-                                                        />
-                                                    </ListItemButton>
+                                                   
                                                     <ListItemButton
                                                         sx={{ borderRadius: `${borderRadius}px` }}
                                                         selected={selectedIndex === 4}

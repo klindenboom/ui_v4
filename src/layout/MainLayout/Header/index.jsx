@@ -68,30 +68,30 @@ const Header = () => {
             <Box sx={{ flexGrow: 1 }} />
 
             {/* mega-menu */}
-            <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+            {/* <Box sx={{ display: { xs: 'none', md: 'block' } }}>
                 <MegaMenuSection />
-            </Box>
+            </Box> */}
 
             {/* live customization & localization */}
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            {/* <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                 <LocalizationSection />
-            </Box>
+            </Box> */}
 
             {/* notification */}
             <NotificationSection />
 
             {/* full sceen toggler */}
-            <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
+            {/* <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
                 <FullScreenSection />
-            </Box>
+            </Box> */}
 
             {/* profile */}
             <ProfileSection />
 
             {/* mobile header */}
-            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+            {/* <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                 <MobileSection />
-            </Box>
+            </Box> */}
         </>
     );
 };

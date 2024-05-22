@@ -4,17 +4,17 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { IconBrandChrome } from '@tabler/icons-react';
+import { IconBoxMultiple2 } from '@tabler/icons-react';
 
 // ==============================|| MENU ITEMS - SAMPLE PAGE ||============================== //
 
 const icons = {
-    IconBrandChrome
+    IconBoxMultiple2
 };
 const tradeGrouping = {
     id: 'trade-grouping',
     title: <FormattedMessage id="Trade Grouping" />,
-    icon: icons.IconBrandChrome,
+    icon: icons.IconBoxMultiple2,
     type: 'group',
     url: '/trade-grouping'
 };

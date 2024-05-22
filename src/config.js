@@ -25,7 +25,7 @@ const config = {
     mode: ThemeMode.DARK,
     presetColor: 'theme1',
     i18n: 'en',
-    themeDirection: ThemeDirection.LTR,
+    themeDirection: ThemeDirection.RTL,
     container: false
 };
 

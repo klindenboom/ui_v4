@@ -4,17 +4,17 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { IconBrandChrome } from '@tabler/icons-react';
+import { IconClipboardList } from '@tabler/icons-react';
 
 // ==============================|| MENU ITEMS - SAMPLE PAGE ||============================== //
 
 const icons = {
-    IconBrandChrome
+    IconClipboardList
 };
 const planBuilder = {
     id: 'plan-builder',
     title: <FormattedMessage id="Plan Builder" />,
-    icon: icons.IconBrandChrome,
+    icon: icons.IconClipboardList,
     type: 'group',
     url: '/plan-builder'
 };
