@@ -4,36 +4,67 @@ import React from 'react';
 import { useDrop } from 'react-dnd';
 import Card from '@mui/material/Card'; 
 import Button from '@mui/material/Button'; 
+import Box from '@mui/material/Box'; 
 import CardContent from '@mui/material/CardContent'; 
 import Typography from '@mui/material/Typography';
 
-const DroppableTradeGroupCard = ({ group, handleAssignTradeToGroup, handleDeleteTradeGroup, handleUpdateTradeGroup }) => {
-  const [{ isOver }, drop] = useDrop({
-    accept: 'TRADE',
-    drop: (item) => handleAssignTradeToGroup(group._id, item.trade._id),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  });
+const ItemTypes = {
+    TRADE: 'trade',
+    TRADE_GROUP: 'tradeGroup',
+  };
 
-  return (
-    <Card ref={drop} sx={{ marginBottom: 2, backgroundColor: isOver ? '#f0f0f0' : 'white' }}>
-      <CardContent>
-        <Typography variant="h6">{group.name}</Typography>
-        <Typography variant="body2">Delta: {group.delta}</Typography>
-        <Typography variant="body2">Theta: {group.theta}</Typography>
-        <Typography variant="body2">Vega: {group.vega}</Typography>
-        <Typography variant="body2">Open Date: {new Date(group.openDate).toLocaleDateString()}</Typography>
-        <Typography variant="body2">Type: {group.type}</Typography>
-        <Typography variant="body2">Category: {group.category}</Typography>
-        <Typography variant="body2">Underlying: {group.underlying}</Typography>
-        <Typography variant="body2">Trade History: {group.tradeHistory.length} entries</Typography>
-        <Typography variant="body2">Closed: {group.isClosed ? 'Yes' : 'No'}</Typography>
-        <Button onClick={() => handleDeleteTradeGroup(group._id)}>Delete</Button>
-        <Button onClick={() => handleUpdateTradeGroup({ ...group, name: 'Updated Name' })}>Update</Button>
-      </CardContent>
-    </Card>
-  );
-};
-
-export default DroppableTradeGroupCard;
+  const DroppableTradeGroupCard = ({ group, handleAssignTradeToGroup, handleDeleteTradeGroup, handleUpdateTradeGroup }) => {
+    const [{ isOver }, drop] = useDrop({
+      accept: ItemTypes.TRADE,
+      drop: (item) => handleAssignTradeToGroup(group._id, item.id),
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+      }),
+    });
+  
+    return (
+      <Card
+        ref={drop}
+        sx={{
+          backgroundColor: isOver ? 'action.hover' : 'background.paper',
+          margin: 2,
+          padding: 2,
+          boxShadow: 3,
+          borderRadius: 2,
+          transition: 'background-color 0.3s ease',
+          '&:hover': {
+            backgroundColor: 'action.hover',
+          },
+        }}
+        variant="outlined"
+      >
+        <CardContent>
+          <Typography
+            sx={{ fontSize: 20, fontWeight: 'bold', color: 'text.primary' }}
+            gutterBottom
+          >
+            {group.name}
+          </Typography>
+          <Box sx={{ marginTop: 1 }}>
+            <Typography variant="body2" color="textSecondary">
+              Open Date: {new Date(group.openDate).toLocaleDateString()}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Delta: {group.delta}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Theta: {group.theta}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Vega: {group.vega}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Number of Trades: {group.tradeHistory.length}
+            </Typography>
+          </Box>
+        </CardContent>
+      </Card>
+    );
+  };
+  
+  export default DroppableTradeGroupCard;
