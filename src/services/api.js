@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import * as Sentry from '@sentry/react';
+import {balanceDataStub} from './stubs';
 
 const BASE_URL = 'http://157.245.122.23';
 
@@ -32,7 +33,7 @@ export const getAccountInfo = async () => {
 export const getAccountBalance = async () => {
   try {
     const response = await api.get('/accounts/balance');
-    return response.data;
+    return balanceDataStub; //response.data;
   } catch (error) {
     return handleApiError(error);
   }

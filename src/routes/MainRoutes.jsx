@@ -8,6 +8,8 @@ import Loadable from 'ui-component/Loadable';
 // sample page routing
 const TradeGrouping = Loadable(lazy(() => import('views/trade-grouping')));
 const Dashboard = Loadable(lazy(() => import('views/dashboard/index.jsx')));
+const AccountMargin = Loadable(lazy(() => import('views/dashboard/AccountMargin')));
+const OpenTrades = Loadable(lazy(() => import('views/dashboard/OpenTrades')));
 const PlanBuilder = Loadable(lazy(() => import('views/plan-builder/index.jsx')));
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -27,6 +29,14 @@ const MainRoutes = {
         {
             path: '/dashboard',
             element: <Dashboard />
+        },
+        {
+            path: '/account-margin',
+            element: <AccountMargin />
+        },
+        {
+            path: '/open-trades',
+            element: <OpenTrades />
         },
         {
             path: '/trade-grouping',

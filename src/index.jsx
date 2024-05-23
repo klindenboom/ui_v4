@@ -9,6 +9,7 @@ import { store } from 'store';
 import * as serviceWorker from 'serviceWorker';
 import reportWebVitals from 'reportWebVitals';
 import { ConfigProvider } from 'contexts/ConfigContext';
+import { GlobalTradeDataProvider } from 'contexts/GlobalTradeDataContext'; 
 
 // style + assets
 import 'assets/scss/style.scss';
@@ -36,7 +37,9 @@ const root = createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
         <ConfigProvider>
+        <GlobalTradeDataProvider>
             <App />
+        </GlobalTradeDataProvider>
         </ConfigProvider>
     </Provider>
 );

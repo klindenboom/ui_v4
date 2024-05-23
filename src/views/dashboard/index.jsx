@@ -1,23 +1,20 @@
-// src/views/dashboard/index.jsx
-
-import React, { useState, useEffect } from 'react';
-import { getAccountBalance, getAccountMargin } from '../../services/api';
+import React, { useState, useEffect, useContext } from 'react';
+import { getAccountBalance } from '../../services/api';
 import LineChart from '../../components/LineChart';
-import MarginCard from '../../components/MarginCard';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { GlobalTradeDataContext } from '../../contexts/GlobalTradeDataContext'; 
 
 const Dashboard = () => {
+  const { recentBalance, setRecentBalance } = useContext(GlobalTradeDataContext);
   const [balanceData, setBalanceData] = useState([]);
-  const [marginData, setMarginData] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const balanceResponse = await getAccountBalance();
-        const marginResponse = await getAccountMargin();
 
         const formattedBalanceData = balanceResponse.map(entry => ({
           x: new Date(entry.date).getTime(), // Convert date to timestamp
@@ -25,43 +22,35 @@ const Dashboard = () => {
         }));
 
         setBalanceData(formattedBalanceData);
-        setMarginData(marginResponse[0].marginData.groups);
+        if (formattedBalanceData.length > 0) {
+          setRecentBalance(formattedBalanceData[formattedBalanceData.length - 1].y);
+        }
       } catch (err) {
         setError(err.message);
       }
     };
 
     fetchData();
-  }, []);
+  }, [setRecentBalance]);
 
   if (error) {
     return <div>Error: {error}</div>;
   }
 
   return (
-    <Container>
-      <Typography variant="h6" gutterBottom>
-        Net Liquididty
-      </Typography>
-      {balanceData.length > 0 ? (
-        <LineChart data={balanceData} />
-      ) : (
-        <Typography>Loading...</Typography>
-      )}
-      <Typography variant="h6" gutterBottom>
-        Account Margin
-      </Typography>
-      {marginData.length > 0 ? (
-        <Grid container spacing={3}>
-          {marginData.map((group, index) => (
-            <Grid item xs={12} md={6} lg={4} key={index}>
-              <MarginCard group={group} />
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Typography>Loading...</Typography>
-      )}
+    <Container maxWidth={false} sx={{ width: '100%', padding: 0 }}>
+      <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '100%', textAlign: 'center', marginTop: 2 }}>
+          <Typography variant="h2" gutterBottom>
+            Net Liquidity {recentBalance !== null && `: $${Math.round(recentBalance).toLocaleString()}`}
+          </Typography>
+        </Box>
+        {balanceData.length > 0 ? (
+          <LineChart data={balanceData} />
+        ) : (
+          <Typography>Loading...</Typography>
+        )}
+      </Box>
     </Container>
   );
 };

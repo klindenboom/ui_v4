@@ -47,7 +47,7 @@ const MainLayout = () => {
     if (menuMasterLoading) return <Loader />;
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', width: '100%' }}>
             {/* header */}
             <AppBar enableColorOnDark position="fixed" color="inherit" elevation={0} sx={{ bgcolor: 'background.default' }}>
                 <Toolbar sx={{ p: isHorizontal ? 1.25 : 2 }}>
@@ -60,7 +60,7 @@ const MainLayout = () => {
 
             {/* main content */}
             <MainContentStyled {...{ borderRadius, menuOrientation, open: drawerOpen, theme }}>
-                <Container maxWidth={container ? 'lg' : false} {...(!container && { sx: { px: { xs: 0 } } })}>
+                <Container maxWidth={false} {...(!container && { sx: { px: { xs: 0 } } })}>
                     {/* breadcrumb */}
                     <Breadcrumbs />
                     <Outlet />

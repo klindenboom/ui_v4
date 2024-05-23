@@ -26,7 +26,7 @@ const config = {
     presetColor: 'theme1',
     i18n: 'en',
     themeDirection: ThemeDirection.RTL,
-    container: false
+    container: false,
 };
 
 export default config;
