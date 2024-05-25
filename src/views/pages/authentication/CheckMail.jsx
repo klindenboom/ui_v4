@@ -10,7 +10,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 // project imports
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
-import Logo from 'ui-component/Logo';
+import { Logo } from 'ui-component/Logo';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 

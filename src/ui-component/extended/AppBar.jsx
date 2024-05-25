@@ -21,7 +21,7 @@ import Typography from '@mui/material/Typography';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 // project imports
-import Logo from 'ui-component/Logo';
+import { Logo } from 'ui-component/Logo';
 import { ThemeMode } from 'config';
 
 // assets
