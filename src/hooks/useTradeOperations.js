@@ -5,9 +5,9 @@ import { GlobalTradeDataContext } from '../contexts/GlobalTradeDataContext'; // 
 const useTradeOperations = () => {
     const { setTradeGroups } = useContext(GlobalTradeDataContext);
 
-    const createTradeGroup = async (name, underlying, type, category) => {
+    const createTradeGroup = async (name, underlying, type, category, tags) => {
         try {
-            const newTradeGroup = await apiCreateTradeGroup({ name, underlying, type, category });
+            const newTradeGroup = await apiCreateTradeGroup({ name, underlying, type, category, tags });
             setTradeGroups(prevGroups => [...prevGroups, newTradeGroup]);
             return newTradeGroup;
         } catch (error) {

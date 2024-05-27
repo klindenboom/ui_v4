@@ -33,7 +33,7 @@ export const getAccountInfo = async () => {
 export const getAccountBalance = async () => {
   try {
     const response = await api.get('/accounts/balance');
-    return balanceDataStub; //response.data;
+    return response.data;
   } catch (error) {
     return handleApiError(error);
   }

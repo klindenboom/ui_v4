@@ -8,7 +8,12 @@ const TreeMapChart = ({ labels, data, title }) => {
   const chartOptions = {
     chart: {
       type: 'treemap',
-      width: '100%'
+      width: '100%',
+      animations: {
+        enabled: true,
+        easing: 'easeinout',
+        speed: 200 // Set the animation duration to 300ms
+      }
     },
     title: {
       text: title,

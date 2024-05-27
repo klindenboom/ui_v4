@@ -17,7 +17,7 @@ const LineChart = ({ data }) => {
       enabled: false
     },
     stroke: {
-      curve: 'smooth'
+      // curve: 'smooth'
     },
     markers: {
         size: 5,

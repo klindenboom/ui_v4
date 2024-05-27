@@ -118,7 +118,7 @@ const ProfileSection = () => {
                     }
                 }}
                 
-                label={<IconSettings stroke={1.5} size="24px" />}
+                label={<IconUser stroke={1.5} size="24px" />}
                 variant="outlined"
                 ref={anchorRef}
                 aria-controls={open ? 'menu-list-grow' : undefined}

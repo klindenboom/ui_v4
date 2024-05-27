@@ -6,7 +6,12 @@ const PieChart = ({ labels, data, title }) => {
   const chartOptions = {
     chart: {
       type: 'pie',
-      width: '100%'
+      width: '100%',
+      animations: {
+        enabled: true,
+        easing: 'easeinout',
+        speed: 200 // Set the animation duration to 300ms
+      }
     },
     labels: labels,
     colors: ['#009688', '#00897b', '#80cbc4', '#00695c', '#b6e0b3', '#6cc067', '#64ba5f'], // Reduced color palette
