@@ -24,7 +24,7 @@ const accountReducer = (state = initialState, action) => {
                 ...state,
                 isLoggedIn: true,
                 isInitialized: true,
-                user
+                user: user,
             };
         }
         case LOGOUT: {

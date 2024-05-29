@@ -13,6 +13,8 @@ import accountReducer from 'store/accountReducer';
 import Loader from 'ui-component/Loader';
 import axios from 'utils/axios';
 
+import { accountLogin } from '../services/api';
+
 const chance = new Chance();
 
 // constant
@@ -55,8 +57,15 @@ export const JWTProvider = ({ children }) => {
                 const serviceToken = window.localStorage.getItem('serviceToken');
                 if (serviceToken && verifyToken(serviceToken)) {
                     setSession(serviceToken);
-                    const response = await axios.get('/api/account/me');
-                    const { user } = response.data;
+                    const response = {
+                        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTUwMzczODM3NTJlZGJiNjQwM2E2NCIsImlhdCI6MTcxNjkxNzEzNSwiZXhwIjoxNzE2OTIwNzM1fQ.OVL39HH2OXHNEu5T8fP4H92FlJhPZ85ldFCW7gUWfeU",
+                        user: {
+                            id: "6655037383752edbb6403a64",
+                            username: "keith.lindenboom@gmail.com"
+                        }
+                    }
+                    // const response = await axios.get('/api/account/me');
+                    const { user } = response;
                     dispatch({
                         type: LOGIN,
                         payload: {
@@ -80,17 +89,34 @@ export const JWTProvider = ({ children }) => {
         init();
     }, []);
 
-    const login = async (email, password) => {
-        // const response = await axios.post('/api/account/login', { email, password });
-        const { serviceToken, user } = { serviceToken:"fasdfdsfasdfdsafds", user:"Dave" };
-        setSession(serviceToken);
-        dispatch({
-            type: LOGIN,
-            payload: {
-                isLoggedIn: true,
-                user
+    const login = async (username, password) => {
+        try {
+            const response = await accountLogin(username, password); // Adjust this to your actual login API call
+            if (response.error) {
+                dispatch({
+                    type: LOGOUT
+                });
+                throw new Error(error.response?.data?.message || 'Login failed');
             }
-        });
+            debugger;
+            const { token, user } = response; // Adjust to match your API response
+            setSession(token);
+            debugger;
+            dispatch({
+                type: LOGIN,
+                payload: {
+                    isLoggedIn: true,
+                    user
+                }
+            });
+        } catch (error) {
+             debugger;
+            // console.error('Login error:', error);
+            dispatch({
+                type: LOGOUT
+            });
+            throw new Error('Login failed');
+        }
     };
 
     const register = async (email, password, firstName, lastName) => {

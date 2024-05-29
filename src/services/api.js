@@ -1,8 +1,6 @@
-// src/services/api.js
-
 import axios from 'axios';
 import * as Sentry from '@sentry/react';
-import {balanceDataStub} from './stubs';
+import { balanceDataStub } from './stubs';
 
 const BASE_URL = 'http://157.245.122.23';
 
@@ -13,6 +11,18 @@ const api = axios.create({
   },
 });
 
+// Intercept requests to add the Authorization header if the token exists
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('serviceToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 const handleApiError = (error) => {
   Sentry.captureException(error);
   console.error(error);
@@ -21,6 +31,15 @@ const handleApiError = (error) => {
 };
 
 // Accounts Endpoints
+export const accountLogin = async (username, password) => {
+  try {
+    const response = await api.post('/login', { username, password });
+    return response.data;
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
 export const getAccountInfo = async () => {
   try {
     const response = await api.get('/accounts');
@@ -48,6 +67,24 @@ export const getAccountMargin = async () => {
   }
 };
 
+export const getAccountSettings = async (userId) => {
+  try {
+    const response = await api.get(`/accounts/settings?userId=${userId}`);
+    return response.data;
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+export const setAccountSettings = async (settings) => {
+  try {
+    const response = await api.post(`/accounts/settings`, settings);
+    return response.data;
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
 // Trade Groups Endpoints
 export const getTradeGroups = async () => {
   try {
@@ -58,14 +95,6 @@ export const getTradeGroups = async () => {
   }
 };
 
-/**
- * Data structure for creating a new trade group:
- * {
- *   name: "string", // required
- *   description: "string", // optional
- *   status: "active" | "inactive" // optional
- * }
- */
 export const createTradeGroup = async (tradeGroupData) => {
   try {
     const response = await api.post('/trades/groups', tradeGroupData);
@@ -75,12 +104,6 @@ export const createTradeGroup = async (tradeGroupData) => {
   }
 };
 
-/**
- * Data structure for deleting a trade group:
- * {
- *   groupId: "string" // required
- * }
- */
 export const deleteTradeGroup = async (groupId) => {
   try {
     const response = await api.delete('/trades/groups', {
@@ -92,16 +115,8 @@ export const deleteTradeGroup = async (groupId) => {
   }
 };
 
-/**
- * Data structure for assigning a trade group to trade history:
- * {
- *   groupId: "string", // required
- *   tradeId: "string" // required
- * }
- */
 export const assignTradeToGroup = async (groupId, tradeId) => {
   try {
-    // {{ipAddress}}:{{port}}/trades/groups/assign?tradeGroupId=664bb8ed06d8e800129b8edd&tradeId=664bd8c1167e2800126f51b0
     const response = await api.patch(`/trades/groups/assign?tradeGroupId=${groupId}&tradeId=${tradeId}`);
     return response.data;
   } catch (error) {
@@ -109,13 +124,6 @@ export const assignTradeToGroup = async (groupId, tradeId) => {
   }
 };
 
-/**
- * Data structure for removing a trade group from trade history:
- * {
- *   groupId: "string", // required
- *   tradeId: "string" // required
- * }
- */
 export const removeTradeFromGroup = async (groupId, tradeId) => {
   try {
     const response = await api.patch('/trades/groups/remove', { groupId, tradeId });
@@ -125,14 +133,6 @@ export const removeTradeFromGroup = async (groupId, tradeId) => {
   }
 };
 
-/**
- * Data structure for updating a trade group:
- * {
- *   name: "string", // required
- *   description: "string", // optional
- *   status: "active" | "inactive" // optional
- * }
- */
 export const updateTradeGroup = async (tradeGroupData) => {
   try {
     const response = await api.patch('/trades/groups/update', tradeGroupData);
@@ -170,10 +170,6 @@ export const getOpenPositions = async () => {
   }
 };
 
-/**
- * Close a trade by tradeId
- * @param {string} tradeId - ID of the trade to close
- */
 export const closeTrade = async (tradeId) => {
   try {
     const response = await api.get('/trades/close', {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useForm, FormProvider } from "react-hook-form";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -7,27 +7,40 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import TradeFormControls from '../components/TradeFormControls'; // Adjust path as necessary
-import useTradeOperations from '../hooks/useTradeOperations'; // Adjust path as necessary
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Chip from '@mui/material/Chip';
 import { useTheme } from '@mui/material/styles';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import JWTContext from 'contexts/JWTContext'; // Import the context
+import { getAccountSettings, setAccountSettings } from 'services/api'; // Import the functions
 
 const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag, createTradeGroup }) => {
     const methods = useForm();
     const [tags, setTags] = useState([]);
     const [newTag, setNewTag] = useState('');
-
+    const [accountSettings, setAccountSettingsState] = useState(null);
     const theme = useTheme();
+    const { user } = useContext(JWTContext); // Access user from context
 
     const resetForm = () => {
         methods.reset();
         setTags([]);
         setNewTag('');
     };
+
+    useEffect(() => {
+        const fetchAccountSettings = async () => {
+            if (user) {
+                const settings = await getAccountSettings(user.id);
+                const accountSettings = settings[0]; // Assuming settings is an array with one element
+                setAccountSettingsState(accountSettings);
+            }
+        };
+
+        fetchAccountSettings();
+    }, [user]);
 
     useEffect(() => {
         if (!open) {
@@ -45,9 +58,13 @@ const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag
         methods.setValue(name, value);
     };
 
-    const handleAddNewTag = () => {
-        if (newTag && !availableTags.includes(newTag)) {
-            handleAddTag(newTag);
+    const handleAddNewTag = async () => {
+        if (newTag && !availableTags.includes(newTag) && !accountSettings?.tags.includes(newTag)) {
+            const updatedTags = [...(accountSettings?.tags || []), newTag];
+            const updatedSettings = { ...accountSettings, tags: updatedTags };
+            await setAccountSettings(updatedSettings);
+            setAccountSettingsState(updatedSettings);
+            handleAddTag(newTag); // Call the existing handleAddTag function
         }
         setNewTag('');
     };
@@ -69,11 +86,36 @@ const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag
                         <Box display="flex" flexDirection="column" gap={2} minWidth="500px">
                             <TextField label="Name" {...methods.register("name")} required />
                             <TextField label="Underlying Symbol" {...methods.register("underlying")} required />
-                            <TradeFormControls 
-                                strategyValue={methods.watch("type")} 
-                                categoryValue={methods.watch("category")} 
-                                onChange={handleChange} 
-                            />
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel>Strategy</InputLabel>
+                                <Select
+                                    name="type"
+                                    value={methods.watch("type")}
+                                    onChange={handleChange}
+                                    label="Strategy"
+                                >
+                                    {accountSettings?.strategies.map((strategy, index) => (
+                                        <MenuItem key={index} value={strategy.name}>
+                                            {strategy.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel>Category</InputLabel>
+                                <Select
+                                    name="category"
+                                    value={methods.watch("category")}
+                                    onChange={handleChange}
+                                    label="Category"
+                                >
+                                    {accountSettings?.categories.map((category, index) => (
+                                        <MenuItem key={index} value={category.name}>
+                                            {category.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                             <TextField
                                 label="New Tag"
                                 value={newTag}
@@ -111,7 +153,7 @@ const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag
                                         </Box>
                                     )}
                                 >
-                                    {availableTags.map((tag) => (
+                                    {availableTags.concat(accountSettings?.tags || []).map((tag) => (
                                         <MenuItem key={tag} value={tag}>
                                             {tag}
                                         </MenuItem>

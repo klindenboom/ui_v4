@@ -10,7 +10,7 @@ const TradeGrouping = Loadable(lazy(() => import('views/trade-grouping')));
 const Dashboard = Loadable(lazy(() => import('views/dashboard/index.jsx')));
 const AccountMargin = Loadable(lazy(() => import('views/dashboard/AccountMargin')));
 const OpenTrades = Loadable(lazy(() => import('views/dashboard/OpenTrades')));
-const PlanBuilder = Loadable(lazy(() => import('views/plan-builder/index.jsx')));
+const Settings = Loadable(lazy(() => import('views/settings/index.jsx')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -43,8 +43,8 @@ const MainRoutes = {
             element: <TradeGrouping />
         },
         {
-            path: '/plan-builder',
-            element: <PlanBuilder />
+            path: '/settings',
+            element: <Settings />
         }
     ]
 };

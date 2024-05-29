@@ -39,6 +39,7 @@ const JWTLogin = ({ loginProp, ...others }) => {
     const scriptedRef = useScriptRef();
 
     const [checked, setChecked] = React.useState(true);
+    const [loginErrors, setLoginErrors] = React.useState('');
 
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => {
@@ -53,7 +54,7 @@ const JWTLogin = ({ loginProp, ...others }) => {
         <Formik
             initialValues={{
                 email: 'keith.lindenboom@gmail.com',
-                password: 'bigBrownDog2021',
+                password: 'Kjlinden1!',
                 submit: null
             }}
             validationSchema={Yup.object().shape({
@@ -67,12 +68,15 @@ const JWTLogin = ({ loginProp, ...others }) => {
                     if (scriptedRef.current) {
                         setStatus({ success: true });
                         setSubmitting(false);
+                        setLoginErrors(null);
                     }
                 } catch (err) {
                     console.error(err);
+                    setLoginErrors('Login Failed. Please try again.')
                     if (scriptedRef.current) {
                         setStatus({ success: false });
-                        setErrors({ submit: err.message });
+                        setErrors({ submit: 'Login Failed' });
+                        setLoginErrors('Login Failed. Please try again.')
                         setSubmitting(false);
                     }
                 }
@@ -162,6 +166,13 @@ const JWTLogin = ({ loginProp, ...others }) => {
                             <FormHelperText error>{errors.submit}</FormHelperText>
                         </Box>
                     )}
+                    {loginErrors && (
+                        <Box sx={{ mt: 3 }}>
+                            <FormHelperText error>{loginErrors}</FormHelperText>
+                        </Box>
+                    )}
+
+
                     <Box sx={{ mt: 2 }}>
                         <AnimateButton>
                             <Button color="secondary" disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">

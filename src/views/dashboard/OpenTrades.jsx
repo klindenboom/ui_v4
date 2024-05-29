@@ -50,7 +50,7 @@ const OpenTrades = () => {
   const [tagFilter, setTagFilter] = useState([]);
   const [underlyingFilter, setUnderlyingFilter] = useState('AllUnderlyings');
 
-const fetchData = async () => {
+  const fetchData = async () => {
     try {
       const tradeGroupsResponse = await getTradeGroups();
       setTradeGroups(tradeGroupsResponse);
@@ -160,6 +160,10 @@ const fetchData = async () => {
     setAvailableTags((prevTags) => [...prevTags, newTag]);
   };
 
+  const handleClearTags = () => {
+    setTagFilter([]);
+  };
+
   const uniqueUnderlyings = [...new Set(tradeGroups.map(group => group.underlying))].sort();
 
   const handleRemoveTag = async (group, tagToRemove) => {
@@ -241,6 +245,21 @@ const fetchData = async () => {
                 ))}
               </Select>
             </FormControl>
+            {tagFilter.length > 0 && (
+              <Tooltip title="Clear All Tags">
+                <IconButton
+                  color="secondary"
+                  onClick={handleClearTags}
+                  sx={{
+                    color: '#009688',
+                    width: '48px',
+                    height: '48px',
+                  }}
+                >
+                  <CloseIcon sx={{ fontSize: '32px' }} />
+                </IconButton>
+              </Tooltip>
+            )}
           </Box>
           <Tooltip title="Add New Trade Group">
             <IconButton

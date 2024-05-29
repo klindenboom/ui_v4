@@ -50,6 +50,7 @@
         "react-timer-hook": "^3.0.7",
         "react18-input-otp": "^1.1.4",
         "redux": "^5.0.1",
+        "redux-devtools-extension": "^2.13.9",
         "redux-persist": "^6.0.0",
         "slick-carousel": "^1.8.1",
         "stylis-plugin-rtl": "^2.1.1",

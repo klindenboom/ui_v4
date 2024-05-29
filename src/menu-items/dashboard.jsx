@@ -46,12 +46,12 @@ const TradeGrouping = {
     url: '/trade-grouping'
 };
 
-const PlanBuilder = {
-    id: 'plan-builder',
-    title: <FormattedMessage id="Plan Builder" />,
+const Settings = {
+    id: 'settings',
+    title: <FormattedMessage id="Settings" />,
     icon: icons.IconClipboardList,
     type: 'item',
-    url: '/plan-builder'
+    url: '/settings'
 };
 
 const menuItems = {
@@ -63,7 +63,7 @@ const menuItems = {
         AccountMargin,
         OpenTrades,
         TradeGrouping,
-        PlanBuilder
+        Settings
     ]
 };
 
