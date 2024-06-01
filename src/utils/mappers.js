@@ -72,11 +72,38 @@ const calculateTotalPLByDate = () => {
     return expirationDate;
   }
 
+  const calculateTotalPrice = (group) => {
+    if (!group.tradeHistory || group.tradeHistory.length === 0) {
+      return 0;
+    }
+    
+    return group.tradeHistory.reduce((total, trade) => {
+      if (!trade.uiData || !trade.uiData.legs) {
+        return total;
+      }
+  
+      return total + trade.uiData.legs.reduce((legTotal, leg) => {
+        if (!leg.fills) {
+          return legTotal;
+        }
+  
+        return legTotal + leg.fills.reduce((fillTotal, fill) => {
+          const price = parseFloat(fill.price);
+          const adjustedPrice = 
+            leg.action === 'sellToOpen' || leg.action === 'sellToClose' ? price : -price;
+          return fillTotal + (fill.fillCount * adjustedPrice * 100);
+        }, 0);
+      }, 0);
+    }, 0).toFixed(2);
+  };
+  
+  
 export  {
     getTimeIntervals,
     tooltipLabelFormatter,
     calculateTotalPLByDate,
     extractPriceCode,
     extractDate,
+    calculateTotalPrice,
 }
 

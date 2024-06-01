@@ -9,6 +9,7 @@ import NavigationScroll from 'layout/NavigationScroll';
 // import RTLLayout from 'ui-component/RTLLayout';
 import Snackbar from 'ui-component/extended/Snackbar';
 import Notistack from 'ui-component/third-party/Notistack';
+import { GlobalTradeDataProvider } from 'contexts/GlobalTradeDataContext'; 
 
 import ThemeCustomization from 'themes';
 
@@ -27,12 +28,14 @@ const App = () => {
             <Locales>
                 <NavigationScroll>
                     <AuthProvider>
+                    <GlobalTradeDataProvider>
                         <>
                             <Notistack>
                                 <RouterProvider router={router} />
                                 <Snackbar />
                             </Notistack>
                         </>
+                    </GlobalTradeDataProvider>
                     </AuthProvider>
                 </NavigationScroll>
             </Locales>

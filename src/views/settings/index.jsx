@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 // material-ui
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
@@ -10,30 +10,30 @@ import Snackbar from '@mui/material/Snackbar';
 import Divider from '@mui/material/Divider';
 
 // project imports
-import JWTContext from 'contexts/JWTContext'; // Import the context
-import { getAccountSettings, setAccountSettings } from 'services/api'; // Import the functions
+import JWTContext from 'contexts/JWTContext';
+import { GlobalTradeDataContext } from 'contexts/GlobalTradeDataContext'; // Import the context
+import { getAccountSettings } from 'services/api'; // Import the API function
 
 // ==============================|| SETTINGS PAGE ||============================== //
 
 const Settings = () => {
-    const { user } = useContext(JWTContext); // Access user from context
-    const [accountSettings, setAccountSettingsState] = useState(null);
-    const [buyingPower, setBuyingPower] = useState(50);
-    const [startingAccountValue, setStartingAccountValue] = useState('');
-    const [categories, setCategories] = useState([]);
-    const [strategies, setStrategies] = useState([]);
-    const [tags, setTags] = useState([]);
+    const { user } = useContext(JWTContext);
+    const { accountSettings, setAccountSettingsState, originalSettings, saveAccountSettings } = useContext(GlobalTradeDataContext);
+    const [buyingPower, setBuyingPower] = useState(accountSettings?.buyingPowerTarget || 50);
+    const [startingAccountValue, setStartingAccountValue] = useState(accountSettings?.startingAccountValue || '');
+    const [categories, setCategories] = useState(accountSettings?.categories || []);
+    const [strategies, setStrategies] = useState(accountSettings?.strategies || []);
+    const [tags, setTags] = useState(accountSettings?.tags || []);
     const [newCategoryName, setNewCategoryName] = useState('');
     const [newCategoryValue, setNewCategoryValue] = useState('');
     const [newStrategyName, setNewStrategyName] = useState('');
     const [newStrategyValue, setNewStrategyValue] = useState('');
     const [newTag, setNewTag] = useState('');
-    const [maxSPExposure, setMaxSPExposure] = useState(50);
-    const [minSPExposure, setMinSPExposure] = useState(0);
+    const [maxSPExposure, setMaxSPExposure] = useState(accountSettings?.buyingPowerSP500Target || 50);
+    const [minSPExposure, setMinSPExposure] = useState(accountSettings?.buyingPowerSP500Target || 0);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [changesMade, setChangesMade] = useState(false);
-    const [originalSettings, setOriginalSettings] = useState(null);
 
     useEffect(() => {
         const fetchAccountSettings = async () => {
@@ -41,8 +41,6 @@ const Settings = () => {
                 const settings = await getAccountSettings(user.id);
                 const accountSettings = settings[0]; // Assuming settings is an array with one element
                 setAccountSettingsState(accountSettings);
-                setOriginalSettings(accountSettings);
-                // Initialize your component state with the fetched settings
                 setBuyingPower(accountSettings.buyingPowerTarget || 50);
                 setStartingAccountValue(accountSettings.startingAccountValue || '');
                 setCategories(accountSettings.categories || []);
@@ -132,13 +130,10 @@ const Settings = () => {
             strategies,
             tags
         };
-        await setAccountSettings(updatedSettings);
-        setAccountSettingsState(updatedSettings);
-        setOriginalSettings(updatedSettings);
-        setChangesMade(false);
+        await saveAccountSettings(updatedSettings);
         setSnackbarMessage('Settings saved');
         setSnackbarOpen(true);
-        console.log('Settings saved');
+        setChangesMade(false);
     };
 
     const handleUndo = () => {

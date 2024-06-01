@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useForm, FormProvider } from "react-hook-form";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -10,37 +10,24 @@ import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Chip from '@mui/material/Chip';
+import Card from '@mui/material/Card';
 import { useTheme } from '@mui/material/styles';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import JWTContext from 'contexts/JWTContext'; // Import the context
-import { getAccountSettings, setAccountSettings } from 'services/api'; // Import the functions
+import { GlobalTradeDataContext } from 'contexts/GlobalTradeDataContext';
 
 const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag, createTradeGroup }) => {
     const methods = useForm();
     const [tags, setTags] = useState([]);
     const [newTag, setNewTag] = useState('');
-    const [accountSettings, setAccountSettingsState] = useState(null);
     const theme = useTheme();
-    const { user } = useContext(JWTContext); // Access user from context
+    const { accountSettings, setAccountSettings } = useContext(GlobalTradeDataContext);
 
     const resetForm = () => {
         methods.reset();
         setTags([]);
         setNewTag('');
     };
-
-    useEffect(() => {
-        const fetchAccountSettings = async () => {
-            if (user) {
-                const settings = await getAccountSettings(user.id);
-                const accountSettings = settings[0]; // Assuming settings is an array with one element
-                setAccountSettingsState(accountSettings);
-            }
-        };
-
-        fetchAccountSettings();
-    }, [user]);
 
     useEffect(() => {
         if (!open) {
@@ -63,7 +50,6 @@ const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag
             const updatedTags = [...(accountSettings?.tags || []), newTag];
             const updatedSettings = { ...accountSettings, tags: updatedTags };
             await setAccountSettings(updatedSettings);
-            setAccountSettingsState(updatedSettings);
             handleAddTag(newTag); // Call the existing handleAddTag function
         }
         setNewTag('');
@@ -94,8 +80,8 @@ const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag
                                     onChange={handleChange}
                                     label="Strategy"
                                 >
-                                    {accountSettings?.strategies.map((strategy, index) => (
-                                        <MenuItem key={index} value={strategy.name}>
+                                    {accountSettings?.strategies?.map((strategy, index) => (
+                                        <MenuItem key={index} value={strategy.value}>
                                             {strategy.name}
                                         </MenuItem>
                                     ))}
@@ -109,8 +95,8 @@ const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag
                                     onChange={handleChange}
                                     label="Category"
                                 >
-                                    {accountSettings?.categories.map((category, index) => (
-                                        <MenuItem key={index} value={category.name}>
+                                    {accountSettings?.categories?.map((category, index) => (
+                                        <MenuItem key={index} value={category.value}>
                                             {category.name}
                                         </MenuItem>
                                     ))}

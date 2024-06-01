@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as Sentry from '@sentry/react';
-import { balanceDataStub } from './stubs';
 
 const BASE_URL = 'http://157.245.122.23';
 
@@ -23,9 +22,16 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-const handleApiError = (error) => {
+const handleApiError = async (error) => {
   Sentry.captureException(error);
   console.error(error);
+
+  // Check if the error response has the specific message and dispatch LOGOUT
+  if (error.response && error.response.data && ['Not authorized, token failed', 'Not authorized, no token'].includes(error.response.data.message)) {   
+    window.location.href = '/login';
+    return { error: true, message: 'Unauthorized access, redirecting to login.' };
+  }
+
   // Return a standardized error response
   return { error: true, message: error.message };
 };

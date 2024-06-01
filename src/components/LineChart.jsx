@@ -6,12 +6,12 @@ const LineChart = ({ data }) => {
   const theme = useTheme();
   const [options, setOptions] = useState({
     chart: {
-      height: "100%",
       type: 'line',
       zoom: {
         enabled: false
       },
-      width: '100%'  // Ensure the chart takes up 100% width
+      width: '100%',  // Ensure the chart takes up 100% width
+      height: '100%'  // Ensure the chart takes up 100% height
     },
     dataLabels: {
       enabled: false
@@ -20,18 +20,34 @@ const LineChart = ({ data }) => {
       // curve: 'smooth'
     },
     markers: {
-        size: 5,
+      size: 5,
     },
     xaxis: {
       type: 'datetime',
       labels: {
-        format: 'dd MMM' // Format to show day and month
+        format: 'dd MMM', // Format to show day and month
       }
     },
     yaxis: {
       labels: {
         formatter: function (value) {
           return `$${Math.round(value).toLocaleString()}`; // Format to show values in dollars to the nearest dollar and include commas
+        }
+      }
+    },
+    tooltip: {
+      x: {
+        formatter: function (value) {
+          const date = new Date(value);
+          return date.toLocaleString('en-US', {
+            timeZone: 'America/New_York',
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+          }) + ' EST';
         }
       }
     }
@@ -73,13 +89,13 @@ const LineChart = ({ data }) => {
   }, [theme]);
 
   return (
-    <div style={{ width: '100%', height:"100%"}}>
+    <div style={{ width: '100%', height: '100%' }}>
       <ReactApexChart
         options={options}
         series={[{ name: 'Account Balance', data }]}
         type="line"
-        
         width="100%" // Ensure the chart component takes up 100% width
+        height="100%" // Ensure the chart component takes up 100% height
       />
     </div>
   );

@@ -5,21 +5,12 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { calculateTotalPrice } from '../utils/mappers';
 
 const DraggableTradeCard = ({ trade, tradeGroups, handleAssignTradeToGroup }) => {
   const greenColor = '#009688';
 
-  const totalPrice = trade.uiData.legs
-    ? trade.uiData.legs.reduce((acc, leg) => {
-        const legTotal = leg.fills.reduce((legAcc, fill) => {
-          const fillPrice = parseFloat(fill.price);
-          const fillCount = parseInt(fill.fillCount, 10);
-          const fillValue = fillPrice * fillCount;
-          return leg.action === 'sellToOpen' ? legAcc + fillValue : legAcc - fillValue;
-        }, 0);
-        return acc + legTotal;
-      }, 0).toFixed(2)
-    : 'N/A';
+  const totalPrice = calculateTotalPrice(trade);
 
   const tradeDate = trade.uiData.timestamp ? new Date(trade.uiData.timestamp).toLocaleString() : 'N/A';
 
