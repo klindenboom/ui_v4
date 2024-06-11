@@ -4,13 +4,16 @@ import LineChart from '../../components/LineChart';
 import BubbleChart from '../../components/BubbleChart';
 import BarChart from '../../components/BarChart';
 import TreeMapChart from '../../components/TreeMapChart';
-import LineChartMargin from '../../components/LineChartMargin'; // Import LineChartMargin
+import PieChart from '../../components/PieChart';
+import LineChartMargin from '../../components/LineChartMargin';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Switch from '@mui/material/Switch';
 import ArrowUpward from '@mui/icons-material/ArrowUpward';
 import ArrowDownward from '@mui/icons-material/ArrowDownward';
 import { green, red } from '@mui/material/colors';
@@ -18,6 +21,7 @@ import { GlobalTradeDataContext } from '../../contexts/GlobalTradeDataContext';
 
 const Dashboard = () => {
   const { recentBalance, setRecentBalance } = useContext(GlobalTradeDataContext);
+  const { accountSettings } = useContext(GlobalTradeDataContext);
   const [balanceData, setBalanceData] = useState([]);
   const [error, setError] = useState(null);
   const [balanceChange, setBalanceChange] = useState(null);
@@ -25,9 +29,10 @@ const Dashboard = () => {
   const [cumulativeBuyingPower, setCumulativeBuyingPower] = useState(0);
   const [buyingPowerChange, setBuyingPowerChange] = useState(null);
   const [buyingPowerChangePercent, setBuyingPowerChangePercent] = useState(null);
-  const [view, setView] = useState('line'); // State to track current view
-  const [marginData, setMarginData] = useState([]); // State for margin data
-  const [marginPercentData, setMarginPercentData] = useState([]); // State for margin percentage data
+  const [view, setView] = useState('line');
+  const [isTreeMap, setIsTreeMap] = useState(true);
+  const [marginData, setMarginData] = useState([]);
+  const [marginPercentData, setMarginPercentData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +40,7 @@ const Dashboard = () => {
         const balanceResponse = await getAccountBalance();
 
         const formattedBalanceData = balanceResponse.map(entry => ({
-          x: new Date(entry.date).getTime(), // Convert date to timestamp
+          x: new Date(entry.date).getTime(),
           y: entry.balance
         }));
 
@@ -103,16 +108,14 @@ const Dashboard = () => {
       const ArrowIcon = isPositive ? ArrowUpward : ArrowDownward;
 
       return (
-        <span style={{ color: 'white', display: 'inline-flex', alignItems: 'center' }}>
-          {recentBalance !== null && `$${Math.round(recentBalance).toLocaleString()}`}
-          <span style={{ display: 'inline-flex', alignItems: 'center', marginLeft: 8 }}>
-            <ArrowIcon style={{ color, verticalAlign: 'middle' }} />
-            <span style={{ color: 'white' }}> (</span>
-            <span style={{ color }}>{isPositive ? '+' : ''}${Math.abs(balanceChange).toLocaleString()}</span>
-            <span style={{ color: 'white' }}>) </span>
-            <span style={{ color, marginLeft: 4 }}>{Math.abs(balanceChangePercent).toFixed(2)}%</span>
-          </span>
-        </span>
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}>
+          <Typography variant="h4" gutterBottom>${Math.round(recentBalance).toLocaleString()}</Typography>
+          <span style={{ color }}><ArrowIcon style={{ color, verticalAlign: 'middle' }} /> {isPositive ? ' +' : ' '}${Math.abs(balanceChange).toLocaleString()} ({Math.abs(balanceChangePercent).toFixed(2)}%)</span>
+        </Box>
       );
     } else {
       return (
@@ -127,19 +130,18 @@ const Dashboard = () => {
     if (cumulativeBuyingPower !== null && recentBalance !== null && buyingPowerChangePercent !== null) {
       const buyingPowerPercent = (cumulativeBuyingPower / recentBalance) * 100;
       const isPositive = buyingPowerChange > 0;
-      const color = isPositive ? red[500] : green[500]; // Inverted colors for buying power
+      const color = isPositive ? red[500] : green[500];
       const ArrowIcon = isPositive ? ArrowUpward : ArrowDownward;
 
       return (
-        <span style={{ color: 'white', display: 'inline-flex', alignItems: 'center' }}>
-          {buyingPowerPercent.toFixed(2)}%
-          <span style={{ display: 'inline-flex', alignItems: 'center', marginLeft: 8 }}>
-            <ArrowIcon style={{ color, verticalAlign: 'middle' }} />
-            <span style={{ color: 'white' }}> (</span>
-            <span style={{ color }}>{isPositive ? '+' : ''}${Math.abs(buyingPowerChange).toLocaleString()} {Math.abs(buyingPowerChangePercent).toFixed(2)}%</span>
-            <span style={{ color: 'white' }}>)</span>
-          </span>
-        </span>
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}>
+          <Typography variant="h4" gutterBottom>{buyingPowerPercent.toFixed(2)}%</Typography>
+          <span style={{ color }}><ArrowIcon style={{ color, verticalAlign: 'middle' }} /> {isPositive ? ' +' : ' '}${Math.abs(buyingPowerChange).toLocaleString()} ({Math.abs(buyingPowerChangePercent).toFixed(2)}%)</span>
+        </Box>
       );
     } else {
       return (
@@ -154,6 +156,10 @@ const Dashboard = () => {
     setView(newView);
   };
 
+  const handleSwitchChange = (event) => {
+    setIsTreeMap(event.target.checked);
+  };
+
   const generateBarChartData = (data) => {
     const keys = ['Stragles', '112 Bear Traps', 'Credit Spreads', 'Naked Puts'];
     const occurrences = keys.map(key => ({
@@ -166,7 +172,6 @@ const Dashboard = () => {
   const sampleData = generateSampleData();
   const barChartData = generateBarChartData(sampleData);
 
-  // Prepare data for TreeMapChart similar to AccountMargin
   const sortedMarginData = [...marginData].sort((a, b) => parseFloat(b['buying-power']) - parseFloat(a['buying-power']));
   const treeMapLabels = sortedMarginData.map(group => group.description);
   const treeMapData = sortedMarginData.map(group => group.deployedPercentage.toFixed(1));
@@ -196,7 +201,7 @@ const Dashboard = () => {
           Strategy Diversification
         </ToggleButton>
       </ToggleButtonGroup>
-      <Box sx={{ width: '100%', height: '50vh', minHeight: '50vh', overflow: 'hidden' }}>
+      <Box sx={{ width: '100%', height: '50vh', minHeight: '50vh', overflow: 'hidden', position: 'relative' }}>
         <Box sx={{ height: '100%', overflow: 'hidden' }}>
           {view === 'line' && balanceData.length > 0 ? (
             <LineChart data={balanceData} title="Account Net Liquididty" />
@@ -204,8 +209,24 @@ const Dashboard = () => {
             <LineChartMargin data={marginPercentData} title="Buying Power % of Net Liq" />
           ) : view === 'bubble' ? (
             <BubbleChart data={sampleData} title="Performance Metrics" />
-          ) : view === 'pie' && treeMapData.length > 0 ? (
-            <TreeMapChart labels={treeMapLabels} data={treeMapData} title="Buying Power Distribution" />
+          ) : view === 'pie' ? (
+            <>
+              <Box sx={{ position: 'absolute', top: '-5px', right: '50px', zIndex: 1, display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body2" color="white">Pie</Typography>
+                <Switch
+                  checked={isTreeMap}
+                  onChange={handleSwitchChange}
+                  name="chartTypeSwitch"
+                  inputProps={{ 'aria-label': 'chart type switch' }}
+                />
+                <Typography variant="body2" color="white">TreeMap</Typography>
+              </Box>
+              {isTreeMap ? (
+                <TreeMapChart labels={treeMapLabels} data={treeMapData} title="Buying Power Distribution" />
+              ) : (
+                <PieChart labels={treeMapLabels} data={treeMapData} title="Buying Power Distribution" />
+              )}
+            </>
           ) : view === 'strat' ? (
             <BarChart data={barChartData} title="Strategy Diversification" />
           ) : (
@@ -213,22 +234,95 @@ const Dashboard = () => {
           )}
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px', height: '15vh', gap: 2 }}>
-        <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <Box sx={{ border: '1px solid #ccc', padding: 2, flex: '1 1 auto' }}>
-            <Typography variant="h5">Account Health</Typography>
-            <Box sx={{ textAlign: 'left', marginTop: 2, flex: '1 1 auto' }}>
-              <Typography variant="h4" gutterBottom>
-                Net Liquidity {renderBalanceChange()}
-              </Typography>
-              <Typography variant="h4" gutterBottom>
-                Buying Power {renderBuyingPowerChange()}
-              </Typography>
-            </Box>
+      <Grid container sx={{ marginTop: 3 }} spacing={1}>
+        <Grid item xs={12} lg={3} sm={6}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '200px',
+              minWidth: '300px',
+              padding: 2,
+              border: '1px solid #ccc',
+              borderRadius: '8px'
+            }}
+          >
+            <Typography variant="h4" gutterBottom>
+              Net Liquidity
+            </Typography>
+            <Typography variant="h4" gutterBottom>{renderBalanceChange()}</Typography>
           </Box>
-          <Divider />
-        </Box>
-      </Box>
+        </Grid>
+        <Grid item xs={12} lg={3} sm={6}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '200px',
+              minWidth: '300px',
+              padding: 2,
+              border: '1px solid #ccc',
+              borderRadius: '8px'
+            }}
+          >
+            <Typography variant="h4" gutterBottom>
+              Realized P/L YTD
+            </Typography>
+            <Typography variant="h4" gutterBottom>
+              {`$${(recentBalance - accountSettings.startingAccountValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            </Typography>
+            <Typography variant="h4" gutterBottom color={green[500]}>
+              <ArrowUpward style={{ verticalAlign: 'middle' }} />{`${((accountSettings.startingAccountValue / recentBalance) * 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`}
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12} lg={3} sm={6}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '200px',
+              minWidth: '300px',
+              padding: 2,
+              border: '1px solid #ccc',
+              borderRadius: '8px'
+            }}
+          >
+            <Typography variant="h4" gutterBottom>
+              Buying Power
+            </Typography>
+            <Typography variant="h4" gutterBottom>{renderBuyingPowerChange()}</Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12} lg={3} sm={6}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '200px',
+              minWidth: '300px',
+              padding: 2,
+              border: '1px solid #ccc',
+              borderRadius: '8px'
+            }}
+          >
+            <Typography variant="h4" gutterBottom>
+              Open Trades: 2
+            </Typography>
+            <Typography variant="h4" gutterBottom color={red[500]}>
+              Unassigned Transactions: 32
+            </Typography>
+          </Box>
+        </Grid>
+      </Grid>
     </Container>
   );
 };
@@ -241,10 +335,10 @@ function generateSampleData() {
     for (let j = 0; j < 11; j++) {
       data.push({
         key: `${keys[i]} - ${j + 1}`,
-        winRate: Math.floor(Math.random() * 100), // Random win rate between 0 and 100
-        totalPL: Math.floor((Math.random() * 6000) - 3000), // Random total P/L between -3000 and 3000, skewed towards positive
-        timeInTrade: generateTimeInTrade(), // Random time in trade skewed towards higher numbers
-        returnOnCap: generateReturnOnCap() // Random return on cap between -9% and +18%, skewed towards positive
+        winRate: Math.floor(Math.random() * 100),
+        totalPL: Math.floor((Math.random() * 6000) - 3000),
+        timeInTrade: generateTimeInTrade(),
+        returnOnCap: generateReturnOnCap()
       });
     }
   }

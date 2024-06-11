@@ -22,13 +22,13 @@ const Dashboard = {
     url: '/dashboard'
 };
 
-const AccountMargin = {
-    id: 'account-margin',
-    title: <FormattedMessage id="Account Margin" />,
-    icon: icons.IconScale,
-    type: 'item',
-    url: '/account-margin'
-};
+// const AccountMargin = {
+//     id: 'account-margin',
+//     title: <FormattedMessage id="Account Margin" />,
+//     icon: icons.IconScale,
+//     type: 'item',
+//     url: '/account-margin'
+// };
 
 const OpenTrades = {
     id: 'open-trades',
@@ -60,7 +60,7 @@ const menuItems = {
     type: 'group',
     children: [
         Dashboard,
-        AccountMargin,
+        // AccountMargin,
         OpenTrades,
         TradeGrouping,
         Settings

@@ -22,7 +22,7 @@ const LineChartMargin = ({ data, title }) => {
       enabled: false
     },
     stroke: {
-      curve: 'smooth',
+     //curve: 'smooth',
       show: true, // Ensure the line is visible
      // width: 2 // You can adjust the width of the line as needed
     },

@@ -16,7 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import SearchIcon from '@mui/icons-material/Search'; // Add this import
+import SearchIcon from '@mui/icons-material/Search';
 import NewTradeGroupForm from '../../components/NewTradeGroupForm';
 import TradeDetailDialog from '../../components/TradeDetailDialog';
 import { getTradeGroups, updateTradeGroup, createTradeGroup } from '../../services/api';
@@ -239,11 +239,11 @@ const OpenTrades = () => {
           </Tooltip>
         </Box>
         {tradeGroups.length > 0 ? (
-          <Grid container spacing={3}>
+          <Grid container spacing={2}>
             {filteredTradeGroups.map((group, index) => (
-              <Grid item xs={12} md={6} lg={4} key={index}>
-                <Card>
-                  <CardContent>
+              <Grid item xs={12} md={6} key={index} sx={{ paddingBottom: '16px' }}>
+                <Card sx={{ margin: 0 }}>
+                  <CardContent sx={{ padding: '8px', '&:last-child': { paddingBottom: '8px' } }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       {editedGroup && editedGroup._id === group._id ? (
                         <TextField
@@ -260,7 +260,7 @@ const OpenTrades = () => {
                           component="div"
                           sx={{
                             color: group.isClosed ? '#8d8b8b' : '#029688',
-                            fontSize: '1.75rem'
+                            fontSize: '1.5rem'
                           }}
                           onClick={() => handleEdit(group)}
                         >
