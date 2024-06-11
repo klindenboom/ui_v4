@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import ReactApexChart from 'react-apexcharts';
+import Box from '@mui/material/Box';
 
-const LineChart = ({ data }) => {
+const LineChartMargin = ({ data, title }) => {
   const theme = useTheme();
 
   // Extract dates from data
@@ -21,7 +22,9 @@ const LineChart = ({ data }) => {
       enabled: false
     },
     stroke: {
-      // curve: 'smooth'
+      curve: 'smooth',
+      show: true, // Ensure the line is visible
+     // width: 2 // You can adjust the width of the line as needed
     },
     markers: {
       size: 5,
@@ -37,7 +40,7 @@ const LineChart = ({ data }) => {
     yaxis: {
       labels: {
         formatter: function (value) {
-          return `$${Math.round(value).toLocaleString()}`; // Format to show values in dollars to the nearest dollar and include commas
+          return `${Math.round(value)}`; // Format to show values as whole numbers
         }
       }
     },
@@ -56,7 +59,29 @@ const LineChart = ({ data }) => {
           }) + ' EST';
         }
       }
-    }
+    },
+    annotations: {
+      yaxis: [
+        {
+          y: 68,
+          borderColor: 'red',
+          strokeDashArray: 0, // Solid line
+          strokeWidth: 5, // Thicker line
+          label: {
+            borderColor: 'red',
+            style: {
+              color: '#fff',
+              background: 'red',
+            },
+            text: 'Target'
+          }
+        }
+      ]
+    },
+    grid: {
+      borderColor: '#FFFFFF'
+    },
+    colors: ['#FF4560']
   });
 
   useEffect(() => {
@@ -73,11 +98,19 @@ const LineChart = ({ data }) => {
           ...prevState.xaxis.labels,
           style: {
             colors: primary
+          },
+          formatter: (value, timestamp) => {
+            const date = new Date(timestamp);
+            // Skip the tick for the start of June
+            if (date.getDate() === 1 && date.getMonth() === 5) {
+              return '';
+            }
+            return new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric' }).format(date);
           }
         }
       },
       title: {
-        text: 'Account Net Liquidity',
+        text: title,
         align: 'center',
         style: {
           fontSize: '20px',
@@ -103,16 +136,16 @@ const LineChart = ({ data }) => {
   }, [theme]);
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <Box sx={{ width: '100%', height: '100%', textAlign: 'center' }}>
       <ReactApexChart
         options={options}
-        series={[{ name: 'Account Balance', data }]}
+        series={[{ name: 'Margin Requirement %', data }]}
         type="line"
         width="100%"
         height="100%"
       />
-    </div>
+    </Box>
   );
 };
 
-export default LineChart;
+export default LineChartMargin;

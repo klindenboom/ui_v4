@@ -1,0 +1,180 @@
+Underlying,Description,Margin Type,Instrument Type,Quantity,Exp Date,DTE,Strike Price,Call/Put,Requirement,BP Usage %,Initial Requirement,Maintenance
+Total,,,,,,,,,"$337,037.93",53.9%,"$428,241.84","$357,793.94"
+/6A,/6A Total,,,,,,,,"$5,134.80",0.8%,"$7,030.39"
+/6AU4,./6AU4 ADUU4 240906P0.615,Futures,Future Option,-12,Sep 6,90d,0.615,Put
+/6AU4,./6AU4 ADUU4 240906C0.715,Futures,Future Option,-12,Sep 6,90d,0.715,Call
+/6E,/6E Total,,,,,,,,"$11,093.50",1.8%,"$14,737.26"
+/6EU4,./6EU4 EUUU4 240906P1.04,Futures,Future Option,-10,Sep 6,90d,1.04,Put
+/6EU4,./6EU4 EUUU4 240906P1.045,Futures,Future Option,-5,Sep 6,90d,1.045,Put
+/6EU4,./6EU4 EUUU4 240906C1.135,Futures,Future Option,-5,Sep 6,90d,1.135,Call
+/6EU4,./6EU4 EUUU4 240906C1.14,Futures,Future Option,-10,Sep 6,90d,1.14,Call
+/CL,/CL Total,,,,,,,,"$58,522.20",9.4%,"$61,528.41"
+/CLN4,./CLN4 LON4  240614P63,Futures,Future Option,-2,Jun 14,6d,63,Put
+/CLN4,./CLN4 LON4  240614P67,Futures,Future Option,-2,Jun 14,6d,67,Put
+/CLN4,./CLN4 LON4  240614C91,Futures,Future Option,1,Jun 14,6d,91,Call
+/CLN4,./CLN4 LON4  240614C92,Futures,Future Option,-1,Jun 14,6d,92,Call
+/CLN4,./CLN4 LON4  240614C108,Futures,Future Option,-2,Jun 14,6d,108,Call
+/CLQ4,./CLQ4 LOQ4  240717P62.5,Futures,Future Option,-2,Jul 17,39d,62.5,Put
+/CLQ4,./CLQ4 LOQ4  240717P71.5,Futures,Future Option,-1,Jul 17,39d,71.5,Put
+/CLQ4,./CLQ4 LOQ4  240717P72.5,Futures,Future Option,1,Jul 17,39d,72.5,Put
+/CLU4,./CLU4 LOU4  240815P59.5,Futures,Future Option,-2,Aug 15,68d,59.5,Put
+/CLU4,./CLU4 LOU4  240815P61,Futures,Future Option,-3,Aug 15,68d,61,Put
+/CLU4,./CLU4 LOU4  240815P62,Futures,Future Option,-2,Aug 15,68d,62,Put
+/CLU4,./CLU4 LOU4  240815P66,Futures,Future Option,-1,Aug 15,68d,66,Put
+/CLU4,./CLU4 LOU4  240815P70.5,Futures,Future Option,-1,Aug 15,68d,70.5,Put
+/CLU4,./CLU4 LOU4  240815P71.5,Futures,Future Option,1,Aug 15,68d,71.5,Put
+/CLU4,./CLU4 LOU4  240815P73,Futures,Future Option,-1,Aug 15,68d,73,Put
+/CLU4,./CLU4 LOU4  240815P74,Futures,Future Option,1,Aug 15,68d,74,Put
+/CLU4,./CLU4 LOU4  240815C93,Futures,Future Option,-1,Aug 15,68d,93,Call
+/CLU4,./CLU4 LOU4  240815C97.5,Futures,Future Option,-3,Aug 15,68d,97.5,Call
+/ES,/ES Total,,,,,,,,"$54,282.54",8.7%,"$54,880.38"
+/ESM4,./ESM4 EW2M4 240614P4050,Futures,Future Option,-4,Jun 14,6d,4050,Put
+/ESM4,./ESM4 EW2M4 240614P5000,Futures,Future Option,-2,Jun 14,6d,5000,Put
+/ESM4,./ESM4 EW2M4 240614P5050,Futures,Future Option,2,Jun 14,6d,5050,Put
+/ESU4,./ESU4 EW3M4 240621P4750,Futures,Future Option,-2,Jun 21,13d,4750,Put
+/ESU4,./ESU4 EW3M4 240621P4800,Futures,Future Option,2,Jun 21,13d,4800,Put
+/ESU4,./ESU4 EW3M4 240621P4850,Futures,Future Option,-1,Jun 21,13d,4850,Put
+/ESU4,./ESU4 EW3M4 240621P4900,Futures,Future Option,1,Jun 21,13d,4900,Put
+/ESU4,./ESU4 EW3M4 240621C5550,Futures,Future Option,-2,Jun 21,13d,5550,Call
+/ESU4,./ESU4 EWM4  240628P4400,Futures,Future Option,-6,Jun 28,20d,4400,Put
+/ESU4,./ESU4 EWM4  240628P4850,Futures,Future Option,-1,Jun 28,20d,4850,Put
+/ESU4,./ESU4 EWM4  240628P4900,Futures,Future Option,1,Jun 28,20d,4900,Put
+/ESU4,./ESU4 EWM4  240628P4950,Futures,Future Option,-3,Jun 28,20d,4950,Put
+/ESU4,./ESU4 EWM4  240628P5000,Futures,Future Option,3,Jun 28,20d,5000,Put
+/ESU4,./ESU4 EWM4  240628C5500,Futures,Future Option,1,Jun 28,20d,5500,Call
+/ESU4,./ESU4 EWM4  240628C5525,Futures,Future Option,-1,Jun 28,20d,5525,Call
+/ESU4,./ESU4 EWM4  240628C5700,Futures,Future Option,-1,Jun 28,20d,5700,Call
+/ESU4,./ESU4 EW3N4 240719P4450,Futures,Future Option,-6,Jul 19,41d,4450,Put
+/ESU4,./ESU4 EW3N4 240719P5050,Futures,Future Option,-3,Jul 19,41d,5050,Put
+/ESU4,./ESU4 EW3N4 240719P5100,Futures,Future Option,3,Jul 19,41d,5100,Put
+/ESU4,./ESU4 EWN4  240731P4350,Futures,Future Option,-4,Jul 31,53d,4350,Put
+/ESU4,./ESU4 EWN4  240731P4550,Futures,Future Option,-1,Jul 31,53d,4550,Put
+/ESU4,./ESU4 EWN4  240731P5000,Futures,Future Option,-2,Jul 31,53d,5000,Put
+/ESU4,./ESU4 EWN4  240731P5050,Futures,Future Option,2,Jul 31,53d,5050,Put
+/ESU4,./ESU4 EWN4  240731C5700,Futures,Future Option,-1,Jul 31,53d,5700,Call
+/ESU4,./ESU4 EW3Q4 240816P4000,Futures,Future Option,-2,Aug 16,69d,4000,Put
+/ESU4,./ESU4 EW3Q4 240816P4100,Futures,Future Option,-2,Aug 16,69d,4100,Put
+/ESU4,./ESU4 EW3Q4 240816P4150,Futures,Future Option,-2,Aug 16,69d,4150,Put
+/ESU4,./ESU4 EW3Q4 240816P4700,Futures,Future Option,-1,Aug 16,69d,4700,Put
+/ESU4,./ESU4 EW3Q4 240816P4850,Futures,Future Option,1,Aug 16,69d,4850,Put
+/ESU4,./ESU4 EWQ4  240830P4200,Futures,Future Option,-4,Aug 30,83d,4200,Put
+/ESU4,./ESU4 EWQ4  240830P4850,Futures,Future Option,-2,Aug 30,83d,4850,Put
+/ESU4,./ESU4 EWQ4  240830P4900,Futures,Future Option,2,Aug 30,83d,4900,Put
+/ESU4,./ESU4 ESU4  240920P4450,Futures,Future Option,-2,Sep 20,103d,4450,Put
+/ESU4,./ESU4 ESU4  240920P5100,Futures,Future Option,-1,Sep 20,103d,5100,Put
+/ESU4,./ESU4 ESU4  240920P5150,Futures,Future Option,1,Sep 20,103d,5150,Put
+/ESZ4,./ESZ4 EW3U4 240920P4600,Futures,Future Option,-6,Sep 20,104d,4600,Put
+/ESZ4,./ESZ4 EW3U4 240920P5150,Futures,Future Option,-3,Sep 20,104d,5150,Put
+/ESZ4,./ESZ4 EW3U4 240920P5200,Futures,Future Option,3,Sep 20,104d,5200,Put
+/ESZ4,./ESZ4 EWU4  240930P4450,Futures,Future Option,-2,Sep 30,114d,4450,Put
+/ESZ4,./ESZ4 EWU4  240930P4500,Futures,Future Option,-2,Sep 30,114d,4500,Put
+/ESZ4,./ESZ4 EWU4  240930P5000,Futures,Future Option,-1,Sep 30,114d,5000,Put
+/ESZ4,./ESZ4 EWU4  240930P5100,Futures,Future Option,1,Sep 30,114d,5100,Put
+/ESZ4,./ESZ4 EWV4  241031P4300,Futures,Future Option,-2,Oct 31,145d,4300,Put
+/ESZ4,./ESZ4 EWV4  241031P4850,Futures,Future Option,-1,Oct 31,145d,4850,Put
+/ESZ4,./ESZ4 EWV4  241031P5050,Futures,Future Option,1,Oct 31,145d,5050,Put
+/GC,/GC Total,,,,,,,,"$35,244.00",5.6%,"$42,086.89"
+/GCQ4,./GCQ4 OGN4  240625P2145,Futures,Future Option,-4,Jun 25,16d,2145,Put
+/GCQ4,./GCQ4 OGN4  240625P2170,Futures,Future Option,2,Jun 25,16d,2170,Put
+/GCQ4,./GCQ4 OGN4  240625P2265,Futures,Future Option,-1,Jun 25,16d,2265,Put
+/GCQ4,./GCQ4 OGN4  240625P2275,Futures,Future Option,1,Jun 25,16d,2275,Put
+/GCQ4,./GCQ4 OGQ4  240725P2175,Futures,Future Option,-1,Jul 25,46d,2175,Put
+/GCQ4,./GCQ4 OGQ4  240725C2570,Futures,Future Option,-1,Jul 25,46d,2570,Call
+/GCV4,./GCV4 OGU4  240827P2190,Futures,Future Option,-1,Aug 27,79d,2190,Put
+/GCV4,./GCV4 OGU4  240827C2650,Futures,Future Option,-1,Aug 27,79d,2650,Call
+/GCV4,./GCV4 OGV4  240925P2165,Futures,Future Option,-3,Sep 25,108d,2165,Put
+/HG,/HG Total,,,,,,,,"$14,167.97",2.3%,"$15,544.43"
+/HGN4,./HGN4 HXEN4 240625P3.5,Futures,Future Option,-4,Jun 25,17d,3.5,Put
+/HGN4,./HGN4 HXEN4 240625P3.7,Futures,Future Option,-2,Jun 25,17d,3.7,Put
+/HGN4,./HGN4 HXEN4 240625P3.75,Futures,Future Option,2,Jun 25,17d,3.75,Put
+/HGN4,./HGN4 HXEN4 240625C5.5,Futures,Future Option,-4,Jun 25,17d,5.5,Call
+/HGN4,./HGN4 HXEN4 240625C5.75,Futures,Future Option,4,Jun 25,17d,5.75,Call
+/HGU4,./HGU4 HXEQ4 240725P3.7,Futures,Future Option,-4,Jul 25,47d,3.7,Put
+/HGU4,./HGU4 HXEQ4 240725P4.1,Futures,Future Option,-2,Jul 25,47d,4.1,Put
+/HGU4,./HGU4 HXEQ4 240725P4.15,Futures,Future Option,2,Jul 25,47d,4.15,Put
+/HGU4,./HGU4 HXEQ4 240725C5,Futures,Future Option,1,Jul 25,47d,5,Call
+/HGU4,./HGU4 HXEQ4 240725C5.05,Futures,Future Option,-1,Jul 25,47d,5.05,Call
+/HGU4,./HGU4 HXEQ4 240725C5.25,Futures,Future Option,1,Jul 25,47d,5.25,Call
+/HGU4,./HGU4 HXEQ4 240725C5.3,Futures,Future Option,-1,Jul 25,47d,5.3,Call
+/HGU4,./HGU4 HXEQ4 240725C6,Futures,Future Option,-2,Jul 25,47d,6,Call
+/HGU4,./HGU4 HXEQ4 240725C6.25,Futures,Future Option,-2,Jul 25,47d,6.25,Call
+/LE,/LE Total,,,,,,,,"$2,930.40",0.5%,"$3,189.63"
+/LEQ4,./LEQ4 LEQ4  240802P148,Futures,Future Option,-8,Aug 2,55d,148,Put
+/LEQ4,./LEQ4 LEQ4  240802P165,Futures,Future Option,-4,Aug 2,55d,165,Put
+/LEQ4,./LEQ4 LEQ4  240802P166,Futures,Future Option,4,Aug 2,55d,166,Put
+/NQ,/NQ Total,,,,,,,,"$8,815.40",1.4%,"$3,817.50"
+/NQU4,./NQU4 QN3M4 240621P15500,Futures,Future Option,-2,Jun 21,13d,15500,Put
+/NQU4,./NQU4 QN3M4 240621P17500,Futures,Future Option,-1,Jun 21,13d,17500,Put
+/NQU4,./NQU4 QN3M4 240621P17750,Futures,Future Option,1,Jun 21,13d,17750,Put
+/NQU4,./NQU4 QN3N4 240719P15750,Futures,Future Option,-2,Jul 19,41d,15750,Put
+/NQU4,./NQU4 QN3N4 240719P17250,Futures,Future Option,-1,Jul 19,41d,17250,Put
+/NQU4,./NQU4 QN3N4 240719P17500,Futures,Future Option,1,Jul 19,41d,17500,Put
+/NQU4,./NQU4 QNEN4 240731P15500,Futures,Future Option,-2,Jul 31,53d,15500,Put
+/NQU4,./NQU4 QNEN4 240731P17000,Futures,Future Option,-1,Jul 31,53d,17000,Put
+/NQU4,./NQU4 QNEN4 240731P17250,Futures,Future Option,1,Jul 31,53d,17250,Put
+/RTY,/RTY Total,,,,,,,,"$14,712.50",2.4%,"$17,462.28"
+/RTYM4,./RTYM4RTOM4 240621P1750,Futures,Future Option,-2,Jun 21,12d,1750,Put
+/RTYU4,./RTYU4RTMQ4 240830P1750,Futures,Future Option,-3,Aug 30,83d,1750,Put
+/RTYU4,./RTYU4RTMQ4 240830P1850,Futures,Future Option,-1,Aug 30,83d,1850,Put
+/RTYU4,./RTYU4RTMQ4 240830C2300,Futures,Future Option,-1,Aug 30,83d,2300,Call
+/RTYU4,./RTYU4RTMQ4 240830C2350,Futures,Future Option,-3,Aug 30,83d,2350,Call
+/ZB,/ZB Total,,,,,,,,"$23,405.03",3.7%,"$26,275.94"
+/ZBU4,./ZBU4 OZBN4 240621P103,Futures,Future Option,-2,Jun 21,13d,103,Put
+/ZBU4,./ZBU4 OZBN4 240621P108,Futures,Future Option,-2,Jun 21,13d,108,Put
+/ZBU4,./ZBU4 OZBN4 240621P109,Futures,Future Option,-1,Jun 21,13d,109,Put
+/ZBU4,./ZBU4 OZBN4 240621P111,Futures,Future Option,1,Jun 21,13d,111,Put
+/ZBU4,./ZBU4 OZBN4 240621P112,Futures,Future Option,-1,Jun 21,13d,112,Put
+/ZBU4,./ZBU4 OZBN4 240621C124,Futures,Future Option,-2,Jun 21,13d,124,Call
+/ZBU4,./ZBU4 OZBQ4 240726P110,Futures,Future Option,-2,Jul 26,48d,110,Put
+/ZBU4,./ZBU4 OZBQ4 240726P115,Futures,Future Option,-1,Jul 26,48d,115,Put
+/ZBU4,./ZBU4 OZBQ4 240726P116,Futures,Future Option,1,Jul 26,48d,116,Put
+/ZBU4,./ZBU4 OZBU4 240823P106,Futures,Future Option,-3,Aug 23,76d,106,Put
+/ZBU4,./ZBU4 OZBU4 240823P107,Futures,Future Option,-2,Aug 23,76d,107,Put
+/ZBU4,./ZBU4 OZBU4 240823C127,Futures,Future Option,-3,Aug 23,76d,127,Call
+/ZBU4,./ZBU4 OZBU4 240823C130,Futures,Future Option,-2,Aug 23,76d,130,Call
+/ZBZ4,./ZBZ4 OZBV4 240920P105,Futures,Future Option,-6,Sep 20,104d,105,Put
+/ZC,/ZC Total,,,,,,,,"$1,188.00",0.2%,"$1,586.77"
+/ZCU4,./ZCU4 OZCU4 240823P380,Futures,Future Option,-2,Aug 23,76d,380,Put
+/ZCU4,./ZCU4 OZCU4 240823C600,Futures,Future Option,-2,Aug 23,76d,600,Call
+/ZW,/ZW Total,,,,,,,,"$7,801.79",1.2%,"$10,455.25"
+/ZWN4,./ZWN4 OZWN4 240621P475,Futures,Future Option,15,Jun 21,13d,475,Put
+/ZWN4,./ZWN4 OZWN4 240621P485,Futures,Future Option,-15,Jun 21,13d,485,Put
+/ZWN4,./ZWN4 OZWN4 240621C720,Futures,Future Option,5,Jun 21,13d,720,Call
+/ZWN4,./ZWN4 OZWN4 240621C785,Futures,Future Option,-7,Jun 21,13d,785,Call
+/ZWN4,./ZWN4 OZWN4 240621C795,Futures,Future Option,7,Jun 21,13d,795,Call
+/ZWU4,./ZWU4 OZWQ4 240726C770,Futures,Future Option,-8,Jul 26,48d,770,Call
+BIL,BIL Total,,,,,,,,"$68,632.50",11.0%,"$137,265.00","$68,632.50"
+BIL,BIL  Subtotal,,,,,,,,"$68,632.50",11.0%,"$137,265.00","$68,632.50"
+BIL,BIL,,Equity,"3,000"
+GBTC,GBTC Total,,,,,,,,"$4,611.00",0.7%,"$4,611.00","$4,611.00"
+GBTC,GBTC  Subtotal,,,,,,,,"$4,611.00",0.7%,"$4,611.00","$4,611.00"
+GBTC,GBTC,,Equity,100
+GFI,GFI Total,,,,,,,,$776.50,0.1%,"$1,553.00",$776.50
+GFI,GFI  Subtotal,,,,,,,,$776.50,0.1%,"$1,553.00",$776.50
+GFI,GFI,,Equity,200
+GME,GME Total,,,,,,,,"$8,466.00",1.4%,"$8,466.00","$8,466.00"
+GME,GME  Subtotal,,,,,,,,"$8,466.00",1.4%,"$8,466.00","$8,466.00"
+GME,GME,,Equity,-100
+MARA,MARA Total,,,,,,,,"$2,312.40",0.4%,"$2,890.50","$2,312.40"
+MARA,MARA  Subtotal,,,,,,,,"$2,312.40",0.4%,"$2,890.50","$2,312.40"
+MARA,MARA,,Equity,200
+META,META Total,,,,,,,,"$7,549.70",1.2%,"$7,248.20","$7,248.20"
+META,META  Subtotal,,,,,,,,$394.50,0.1%,$0.00,$0.00
+META,META  240614C00500000,,Equity Option,1,Jun 14,6d,500,Call
+META,META  240614C00520000,,Equity Option,-1,Jun 14,6d,520,Call
+META,META  Subtotal,,,,,,,,"$7,155.20",1.1%,"$7,248.20","$7,248.20"
+META,META  240614C00520000,,Equity Option,-1,Jun 14,6d,520,Call
+RIVN,RIVN Total,,,,,,,,"$1,483.30",0.2%,"$2,010.60","$1,549.80"
+RIVN,RIVN  Subtotal,,,,,,,,$817.60,0.1%,$858.60,$858.60
+RIVN,RIVN  240614P00011000,,Equity Option,-2,Jun 14,6d,11,Put
+RIVN,RIVN  Subtotal,,,,,,,,$345.60,0.1%,$576.00,$345.60
+RIVN,RIVN,,Equity,100
+RIVN,RIVN  Subtotal,,,,,,,,$320.10,0.1%,$576.00,$345.60
+RIVN,RIVN,,Equity,100
+RIVN,RIVN  240614C00012000,,Equity Option,-1,Jun 14,6d,12,Call
+SBUX,SBUX Total,,,,,,,,"$5,908.40",0.9%,"$5,602.40","$5,602.40"
+SBUX,SBUX  Subtotal,,,,,,,,$422.00,0.1%,$0.00,$0.00
+SBUX,SBUX  240614C00081000,,Equity Option,4,Jun 14,6d,81,Call
+SBUX,SBUX  240614C00084000,,Equity Option,-4,Jun 14,6d,84,Call
+SBUX,SBUX  Subtotal,,,,,,,,"$5,486.40",0.9%,"$5,602.40","$5,602.40"
+SBUX,SBUX  240614C00084000,,Equity Option,-4,Jun 14,6d,84,Call

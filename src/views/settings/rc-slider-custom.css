@@ -1,0 +1,13 @@
+/* Custom styles for rc-slider to match MUI slider */
+.rc-slider-track {
+    background-color: #1976d2 !important; /* MUI primary color */
+  }
+  
+  .rc-slider-handle {
+    border-color: #1976d2 !important; /* MUI primary color */
+  }
+  
+  .rc-slider-rail {
+    background-color: #90caf9 !important; /* MUI light primary color */
+  }
+  

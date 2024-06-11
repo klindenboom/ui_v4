@@ -7,6 +7,7 @@ const PieChart = ({ labels, data, title }) => {
     chart: {
       type: 'pie',
       width: '100%',
+      height: '100%',
       animations: {
         enabled: true,
         easing: 'easeinout',
@@ -16,6 +17,10 @@ const PieChart = ({ labels, data, title }) => {
     labels: labels,
     colors: ['#009688', '#00897b', '#80cbc4', '#00695c', '#b6e0b3', '#6cc067', '#64ba5f'], // Reduced color palette
     legend: {
+      labels: {
+        colors: '#FFFFFF', // Set legend labels color to white
+        useSeriesColors: false
+      },
       position: 'bottom',
       horizontalAlign: 'center',
       fontSize: '16px', // Increase font size
@@ -62,8 +67,9 @@ const PieChart = ({ labels, data, title }) => {
   const chartSeries = data.map(Number); // Ensure data is in numeric format
 
   return (
-    <Box sx={{ width: '100%', height: '60vh', textAlign: 'center' }}>
-      <ReactApexChart options={chartOptions} series={chartSeries} type="pie" />
+    <Box sx={{ width: '100%', height: '100%', textAlign: 'center' }}>
+      <ReactApexChart options={chartOptions} series={chartSeries} type="pie"  width="100%"
+        height="100%" />
     </Box>
   );
 };

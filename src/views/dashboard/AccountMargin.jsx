@@ -77,10 +77,10 @@ const AccountMargin = () => {
 
   const sortedLabels = sortedMarginData.map(group => group.description);
   const sortedDeployedBuyingPowerPercentages = sortedMarginData.map(group => group.deployedPercentage.toFixed(1));
-
+  debugger;
   return (
     <Container maxWidth={false} sx={{ width: '100%', padding: 0 }}>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%', height: '50vh', minHeight: '50vh' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 2 }}>
           <Typography variant="h4" gutterBottom sx={{ marginRight: 2, color: theme.palette.text.primary }}>
             {recentBalance !== null && `Current Net Liq: `}
@@ -103,7 +103,7 @@ const AccountMargin = () => {
         </Box>
         {marginData.length > 0 ? (
           showCharts ? (
-            <Box sx={{ width: '100%' }}>
+            <Box sx={{ width: '100%', height:'100%' }}>
               {chartType === 'treemap' ? (
                 <TreeMapChart labels={sortedLabels} data={sortedDeployedBuyingPowerPercentages} title="Percent of Deployed Buying Power" />
               ) : (

@@ -1,36 +1,36 @@
 import React, { useContext, useEffect, useState } from 'react';
-// material-ui
 import Typography from '@mui/material/Typography';
-import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Snackbar from '@mui/material/Snackbar';
-import Divider from '@mui/material/Divider';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+import './rc-slider-custom.css';
 
 // project imports
 import JWTContext from 'contexts/JWTContext';
-import { GlobalTradeDataContext } from 'contexts/GlobalTradeDataContext'; // Import the context
-import { getAccountSettings } from 'services/api'; // Import the API function
-
-// ==============================|| SETTINGS PAGE ||============================== //
+import { GlobalTradeDataContext } from 'contexts/GlobalTradeDataContext';
+import { getAccountSettings, setAccountSettings } from '../../services/api';
 
 const Settings = () => {
     const { user } = useContext(JWTContext);
-    const { accountSettings, setAccountSettingsState, originalSettings, saveAccountSettings } = useContext(GlobalTradeDataContext);
+    const { accountSettings, setAccountSettingsState, originalSettings } = useContext(GlobalTradeDataContext);
     const [buyingPower, setBuyingPower] = useState(accountSettings?.buyingPowerTarget || 50);
     const [startingAccountValue, setStartingAccountValue] = useState(accountSettings?.startingAccountValue || '');
+    const [monthlyGoal, setMonthlyGoal] = useState(accountSettings?.monthlyGoal || '');
+    const [ytdContributions, setYtdContributions] = useState(accountSettings?.ytdContributions || '');
     const [categories, setCategories] = useState(accountSettings?.categories || []);
     const [strategies, setStrategies] = useState(accountSettings?.strategies || []);
     const [tags, setTags] = useState(accountSettings?.tags || []);
     const [newCategoryName, setNewCategoryName] = useState('');
-    const [newCategoryValue, setNewCategoryValue] = useState('');
     const [newStrategyName, setNewStrategyName] = useState('');
-    const [newStrategyValue, setNewStrategyValue] = useState('');
     const [newTag, setNewTag] = useState('');
     const [maxSPExposure, setMaxSPExposure] = useState(accountSettings?.buyingPowerSP500Target || 50);
     const [minSPExposure, setMinSPExposure] = useState(accountSettings?.buyingPowerSP500Target || 0);
+    const [strangleProfitTarget, setStrangleProfitTarget] = useState(accountSettings?.strangleProfitTarget || 50);
+    const [strangleStopLoss, setStrangleStopLoss] = useState(accountSettings?.strangleStopLoss || 50);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [changesMade, setChangesMade] = useState(false);
@@ -39,59 +39,51 @@ const Settings = () => {
         const fetchAccountSettings = async () => {
             if (user) {
                 const settings = await getAccountSettings(user.id);
-                const accountSettings = settings[0]; // Assuming settings is an array with one element
+                const accountSettings = settings[0];
                 setAccountSettingsState(accountSettings);
                 setBuyingPower(accountSettings.buyingPowerTarget || 50);
                 setStartingAccountValue(accountSettings.startingAccountValue || '');
+                setMonthlyGoal(accountSettings.monthlyGoal || '');
+                setYtdContributions(accountSettings.ytdContributions || '');
                 setCategories(accountSettings.categories || []);
                 setStrategies(accountSettings.strategies || []);
                 setTags(accountSettings.tags || []);
                 setMaxSPExposure(accountSettings.buyingPowerSP500Target || 50);
                 setMinSPExposure(accountSettings.buyingPowerSP500Target || 0);
+                setStrangleProfitTarget(accountSettings.strangleProfitTarget || 50);
+                setStrangleStopLoss(accountSettings.strangleStopLoss || 50);
             }
         };
 
         fetchAccountSettings();
     }, [user]);
 
-    const handleBuyingPowerChange = (event, newValue) => {
-        setBuyingPower(100 - newValue);
-        setChangesMade(true);
-    };
-
-    const handleMaxSPExposureChange = (event, newValue) => {
-        setMaxSPExposure(100 - newValue);
-        setChangesMade(true);
-    };
-
-    const handleMinSPExposureChange = (event, newValue) => {
-        setMinSPExposure(100 - newValue);
+    const handleSliderChange = (value, setState) => {
+        setState(value);
         setChangesMade(true);
     };
 
     const handleAddCategory = () => {
-        if (!newCategoryName || !newCategoryValue) {
-            setSnackbarMessage('Both category name and value are required');
+        if (!newCategoryName) {
+            setSnackbarMessage('Category name is required');
             setSnackbarOpen(true);
             return;
         }
-        const updatedCategories = [...categories, { name: newCategoryName, value: newCategoryValue }];
+        const updatedCategories = [...categories, { name: newCategoryName }];
         setCategories(updatedCategories);
         setNewCategoryName('');
-        setNewCategoryValue('');
         setChangesMade(true);
     };
 
     const handleAddStrategy = () => {
-        if (!newStrategyName || !newStrategyValue) {
-            setSnackbarMessage('Both strategy name and value are required');
+        if (!newStrategyName) {
+            setSnackbarMessage('Strategy name is required');
             setSnackbarOpen(true);
             return;
         }
-        const updatedStrategies = [...strategies, { name: newStrategyName, value: newStrategyValue }];
+        const updatedStrategies = [...strategies, { name: newStrategyName }];
         setStrategies(updatedStrategies);
         setNewStrategyName('');
-        setNewStrategyValue('');
         setChangesMade(true);
     };
 
@@ -124,13 +116,17 @@ const Settings = () => {
         const updatedSettings = {
             ...accountSettings,
             startingAccountValue,
+            monthlyGoal,
+            ytdContributions,
             buyingPowerTarget: buyingPower,
             buyingPowerSP500Target: maxSPExposure,
+            strangleProfitTarget,
+            strangleStopLoss,
             categories,
             strategies,
             tags
         };
-        await saveAccountSettings(updatedSettings);
+        await setAccountSettings(updatedSettings);
         setSnackbarMessage('Settings saved');
         setSnackbarOpen(true);
         setChangesMade(false);
@@ -140,11 +136,15 @@ const Settings = () => {
         setAccountSettingsState(originalSettings);
         setBuyingPower(originalSettings.buyingPowerTarget || 50);
         setStartingAccountValue(originalSettings.startingAccountValue || '');
+        setMonthlyGoal(originalSettings.monthlyGoal || '');
+        setYtdContributions(originalSettings.ytdContributions || '');
         setCategories(originalSettings.categories || []);
         setStrategies(originalSettings.strategies || []);
         setTags(originalSettings.tags || []);
         setMaxSPExposure(originalSettings.buyingPowerSP500Target || 50);
         setMinSPExposure(originalSettings.buyingPowerSP500Target || 0);
+        setStrangleProfitTarget(originalSettings.strangleProfitTarget || 50);
+        setStrangleStopLoss(originalSettings.strangleStopLoss || 50);
         setChangesMade(false);
     };
 
@@ -167,124 +167,183 @@ const Settings = () => {
                         fullWidth
                         sx={{ mr: 2 }}
                     />
+                    <TextField
+                        label="Monthly Goal (%)"
+                        value={monthlyGoal}
+                        onChange={(e) => {
+                            const value = e.target.value.replace(/[^\d]/g, '');
+                            setMonthlyGoal(value ? value : '');
+                            setChangesMade(true);
+                        }}
+                        variant="outlined"
+                        fullWidth
+                        sx={{ mr: 2 }}
+                    />
+                    <TextField
+                        label="YTD Contributions/Withdrawals"
+                        value={ytdContributions}
+                        onChange={(e) => {
+                            setYtdContributions(e.target.value);
+                            setChangesMade(true);
+                        }}
+                        variant="outlined"
+                        fullWidth
+                    />
                 </Box>
             </Box>
-            <Box sx={{ mb: 4, display: 'flex', alignItems: 'center' }}>
-                <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold', flex: 1 }}>
-                    Target Buying Power Usage
+            <Box sx={{ mb: 4 }}>
+                <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold' }}>
+                    Settings
                 </Typography>
-                <Slider
-                    value={100 - buyingPower}
-                    onChange={handleBuyingPowerChange}
-                    aria-labelledby="buying-power-usage-slider"
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={(value) => 100 - value}
-                    step={1}
-                    marks
-                    min={1}
-                    max={100}
-                    sx={{
-                        mr: 2,
-                        color: 'green',
-                        '& .MuiSlider-thumb': {
-                            bgcolor: 'primary.main'
-                        },
-                        '& .MuiSlider-track': {
-                            bgcolor: 'primary.main'
-                        },
-                        '& .MuiSlider-rail': {
-                            bgcolor: 'primary.light'
-                        },
-                        flex: 3
-                    }}
-                />
-                <TextField
-                    label="Target Buying Power Usage (%)"
-                    value={buyingPower}
-                    variant="outlined"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                    sx={{ width: 80, mr: 2, flex: 1 }}
-                />
-            </Box>
-            <Box sx={{ mb: 4, display: 'flex', alignItems: 'center' }}>
-                <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold', flex: 1 }}>
-                    Target Max S&P Exposure
-                </Typography>
-                <Slider
-                    value={100 - maxSPExposure}
-                    onChange={handleMaxSPExposureChange}
-                    aria-labelledby="max-sp-exposure-slider"
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={(value) => 100 - value}
-                    step={1}
-                    marks
-                    min={0}
-                    max={100}
-                    sx={{
-                        mr: 2,
-                        color: 'green',
-                        '& .MuiSlider-thumb': {
-                            bgcolor: 'primary.main'
-                        },
-                        '& .MuiSlider-track': {
-                            bgcolor: 'primary.main'
-                        },
-                        '& .MuiSlider-rail': {
-                            bgcolor: 'primary.light'
-                        },
-                        flex: 3
-                    }}
-                />
-                <TextField
-                    label="Target Max S&P Exposure (%)"
-                    value={maxSPExposure}
-                    variant="outlined"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                    sx={{ width: 80, mr: 2, flex: 1 }}
-                />
-            </Box>
-            <Box sx={{ mb: 4, display: 'flex', alignItems: 'center' }}>
-                <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold', flex: 1 }}>
-                    Target Min S&P Exposure
-                </Typography>
-                <Slider
-                    value={100 - minSPExposure}
-                    onChange={handleMinSPExposureChange}
-                    aria-labelledby="min-sp-exposure-slider"
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={(value) => 100 - value}
-                    step={1}
-                    marks
-                    min={0}
-                    max={100}
-                    sx={{
-                        mr: 2,
-                        color: 'green',
-                        '& .MuiSlider-thumb': {
-                            bgcolor: 'primary.main'
-                        },
-                        '& .MuiSlider-track': {
-                            bgcolor: 'primary.main'
-                        },
-                        '& .MuiSlider-rail': {
-                            bgcolor: 'primary.light'
-                        },
-                        flex: 3
-                    }}
-                />
-                <TextField
-                    label="Target Min S&P Exposure (%)"
-                    value={minSPExposure}
-                    variant="outlined"
-                    InputProps={{
-                        readOnly: true,
-                    }}
-                    sx={{ width: 80, mr: 2, flex: 1 }}
-                />
+                <Box sx={{ mb: 4, display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 30%' }}>
+                        <Typography variant="h6" sx={{ mb: 1 }}>
+                            Buying Power Usage
+                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <Slider
+                                value={buyingPower}
+                                onChange={(value) => handleSliderChange(value, setBuyingPower)}
+                                min={1}
+                                max={100}
+                                step={1}
+                                marks
+                                tipFormatter={(value) => `${value}%`}
+                                trackStyle={{ backgroundColor: '#1976d2' }}
+                                handleStyle={{ borderColor: '#1976d2' }}
+                                railStyle={{ backgroundColor: '#90caf9' }}
+                                sx={{ flex: 1 }}
+                            />
+                            <TextField
+                                label="Buying Power (%)"
+                                value={`${buyingPower}%`}
+                                variant="outlined"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ width: 80 }}
+                            />
+                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 30%' }}>
+                        <Typography variant="h6" sx={{ mb: 1 }}>
+                            Max S&P Exposure
+                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <Slider
+                                value={maxSPExposure}
+                                onChange={(value) => handleSliderChange(value, setMaxSPExposure)}
+                                min={0}
+                                max={100}
+                                step={1}
+                                marks
+                                tipFormatter={(value) => `${value}%`}
+                                trackStyle={{ backgroundColor: '#1976d2' }}
+                                handleStyle={{ borderColor: '#1976d2' }}
+                                railStyle={{ backgroundColor: '#90caf9' }}
+                                sx={{ flex: 1 }}
+                            />
+                            <TextField
+                                label="Max S&P (%)"
+                                value={`${maxSPExposure}%`}
+                                variant="outlined"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ width: 80 }}
+                            />
+                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 30%' }}>
+                        <Typography variant="h6" sx={{ mb: 1 }}>
+                            Min S&P Exposure
+                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <Slider
+                                value={minSPExposure}
+                                onChange={(value) => handleSliderChange(value, setMinSPExposure)}
+                                min={0}
+                                max={100}
+                                step={1}
+                                marks
+                                tipFormatter={(value) => `${value}%`}
+                                trackStyle={{ backgroundColor: '#1976d2' }}
+                                handleStyle={{ borderColor: '#1976d2' }}
+                                railStyle={{ backgroundColor: '#90caf9' }}
+                                sx={{ flex: 1 }}
+                            />
+                            <TextField
+                                label="Min S&P (%)"
+                                value={`${minSPExposure}%`}
+                                variant="outlined"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ width: 80 }}
+                            />
+                        </Box>
+                    </Box>
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection:'row', gap: 2 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 50%' }}>
+                        <Typography variant="h6" sx={{ mb: 1 }}>
+                            Strangle Profit Target
+                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <Slider
+                                value={strangleProfitTarget}
+                                onChange={(value) => handleSliderChange(value, setStrangleProfitTarget)}
+                                min={0}
+                                max={100}
+                                step={1}
+                                marks
+                                tipFormatter={(value) => `${value}%`}
+                                trackStyle={{ backgroundColor: '#1976d2' }}
+                                handleStyle={{ borderColor: '#1976d2' }}
+                                railStyle={{ backgroundColor: '#90caf9' }}
+                                sx={{ flex: 1 }}
+                            />
+                            <TextField
+                                label="Profit Target (%)"
+                                value={`${strangleProfitTarget}%`}
+                                variant="outlined"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ width: 80 }}
+                            />
+                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 50%' }}>
+                        <Typography variant="h6" sx={{ mb: 1 }}>
+                            Strangle Stop Loss
+                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <Slider
+                                value={strangleStopLoss}
+                                onChange={(value) => handleSliderChange(value, setStrangleStopLoss)}
+                                min={0}
+                                max={100}
+                                step={1}
+                                marks
+                                tipFormatter={(value) => `${value}%`}
+                                trackStyle={{ backgroundColor: '#1976d2' }}
+                                handleStyle={{ borderColor: '#1976d2' }}
+                                railStyle={{ backgroundColor: '#90caf9' }}
+                                sx={{ flex: 1 }}
+                            />
+                            <TextField
+                                label="Stop Loss (%)"
+                                value={`${strangleStopLoss}%`}
+                                variant="outlined"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ width: 80 }}
+                            />
+                        </Box>
+                    </Box>
+                </Box>
             </Box>
             <Box sx={{ mb: 4 }}>
                 <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold' }}>
@@ -295,13 +354,6 @@ const Settings = () => {
                         label="Category Name"
                         value={newCategoryName}
                         onChange={(e) => setNewCategoryName(e.target.value)}
-                        variant="outlined"
-                        sx={{ mr: 2, maxWidth: 300 }}
-                    />
-                    <TextField
-                        label="Category Value"
-                        value={newCategoryValue}
-                        onChange={(e) => setNewCategoryValue(e.target.value)}
                         variant="outlined"
                         sx={{ mr: 2, maxWidth: 300 }}
                     />
@@ -328,13 +380,6 @@ const Settings = () => {
                         label="Strategy Name"
                         value={newStrategyName}
                         onChange={(e) => setNewStrategyName(e.target.value)}
-                        variant="outlined"
-                        sx={{ mr: 2, maxWidth: 300 }}
-                    />
-                    <TextField
-                        label="Strategy Value"
-                        value={newStrategyValue}
-                        onChange={(e) => setNewStrategyValue(e.target.value)}
                         variant="outlined"
                         sx={{ mr: 2, maxWidth: 300 }}
                     />
@@ -378,22 +423,21 @@ const Settings = () => {
                     ))}
                 </Box>
             </Box>
-            <Divider sx={{ my: 4 }} />
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                 {changesMade && (
-                    <Button 
-                        variant="outlined" 
-                        color="secondary" 
+                    <Button
+                        variant="outlined"
+                        color="secondary"
                         onClick={handleUndo}
                         sx={{ mr: 2 }}
                     >
                         Undo
                     </Button>
                 )}
-                <Button 
-                    variant="contained" 
-                    color="primary" 
-                    onClick={handleSave} 
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSave}
                     disabled={!changesMade}
                 >
                     Save

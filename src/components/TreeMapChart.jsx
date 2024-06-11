@@ -9,6 +9,7 @@ const TreeMapChart = ({ labels, data, title }) => {
     chart: {
       type: 'treemap',
       width: '100%',
+      height: '100%',
       animations: {
         enabled: true,
         easing: 'easeinout',
@@ -55,9 +56,10 @@ const TreeMapChart = ({ labels, data, title }) => {
   })); // Ensure data is in the correct format for treemap
 
   return (
-    <Box sx={{ width: '100%', height: '60vh', textAlign: 'center' }}>
-      <ReactApexChart options={chartOptions} series={[{ data: chartSeries }]} type="treemap" />
-    </Box>
+    <div style={{ width: '100%', height: '100%' }}>
+      <ReactApexChart options={chartOptions} series={[{ data: chartSeries }]} type="treemap" width="100%"
+        height="100%"/>
+      </div>
   );
 };
 
