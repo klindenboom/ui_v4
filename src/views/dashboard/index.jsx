@@ -20,7 +20,7 @@ import { green, red } from '@mui/material/colors';
 import { GlobalTradeDataContext } from '../../contexts/GlobalTradeDataContext';
 
 const Dashboard = () => {
-  const { recentBalance, setRecentBalance } = useContext(GlobalTradeDataContext);
+  const { recentBalance, setRecentBalance, tradeGroups, tradesWithoutGroupId, loading } = useContext(GlobalTradeDataContext);
   const { accountSettings } = useContext(GlobalTradeDataContext);
   const [balanceData, setBalanceData] = useState([]);
   const [error, setError] = useState(null);
@@ -160,22 +160,31 @@ const Dashboard = () => {
     setIsTreeMap(event.target.checked);
   };
 
-  const generateBarChartData = (data) => {
-    const keys = ['Stragles', '112 Bear Traps', 'Credit Spreads', 'Naked Puts'];
-    const occurrences = keys.map(key => ({
-      key,
-      value: data.filter(item => item.key.includes(key)).length,
+  const generateTradeGroupData = (tradeGroups) => {
+    debugger;
+    const categoryCounts = tradeGroups.reduce((acc, group) => {
+      if (group.category in acc) {
+        acc[group.category]++;
+      } else {
+        acc[group.category] = 1;
+      }
+      return acc;
+    }, {});
+
+    return Object.keys(categoryCounts).map(category => ({
+      key: category,
+      value: categoryCounts[category]
     }));
-    return occurrences;
   };
 
-  const sampleData = generateSampleData();
-  const barChartData = generateBarChartData(sampleData);
+  const tradeGroupData = generateTradeGroupData(tradeGroups);
 
   const sortedMarginData = [...marginData].sort((a, b) => parseFloat(b['buying-power']) - parseFloat(a['buying-power']));
   const treeMapLabels = sortedMarginData.map(group => group.description);
   const treeMapData = sortedMarginData.map(group => group.deployedPercentage.toFixed(1));
-
+ if (loading) {
+  return <h2>Loading...</h2>;
+ }
   return (
     <Container maxWidth={false} sx={{ width: '100%', height: "100%", padding: 0 }}>
       <ToggleButtonGroup
@@ -208,7 +217,7 @@ const Dashboard = () => {
           ) : view === 'margin' && marginPercentData.length > 0 ? (
             <LineChartMargin data={marginPercentData} title="Buying Power % of Net Liq" />
           ) : view === 'bubble' ? (
-            <BubbleChart data={sampleData} title="Performance Metrics" />
+            <BubbleChart data={generateSampleData()} title="Performance Metrics" />
           ) : view === 'pie' ? (
             <>
               <Box sx={{ position: 'absolute', top: '-5px', right: '50px', zIndex: 1, display: 'flex', alignItems: 'center' }}>
@@ -228,7 +237,7 @@ const Dashboard = () => {
               )}
             </>
           ) : view === 'strat' ? (
-            <BarChart data={barChartData} title="Strategy Diversification" />
+            <BarChart data={tradeGroupData} title="Strategy Diversification" />
           ) : (
             <Typography>Loading...</Typography>
           )}
@@ -315,10 +324,10 @@ const Dashboard = () => {
             }}
           >
             <Typography variant="h4" gutterBottom>
-              Open Trades: 2
+              Open Trades: {tradeGroupData.length}
             </Typography>
             <Typography variant="h4" gutterBottom color={red[500]}>
-              Unassigned Transactions: 32
+              Unassigned Transactions: {tradesWithoutGroupId.length}
             </Typography>
           </Box>
         </Grid>

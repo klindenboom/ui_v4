@@ -94,7 +94,19 @@ const LineChart = ({ data }) => {
         }
       },
       grid: {
-        borderColor: divider
+        borderColor: divider,
+        xaxis: {
+          lines: {
+            show: false // Hide vertical lines
+          }
+        },
+        yaxis: {
+          lines: {
+            show: true, // Show horizontal lines
+            opacity: 0, // Adjust the opacity to make the lines less bright
+            color: '#000000' // You can also adjust the color if needed
+          }
+        }
       },
       tooltip: {
         theme: theme.palette.mode

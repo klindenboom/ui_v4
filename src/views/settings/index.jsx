@@ -191,238 +191,229 @@ const Settings = () => {
                     />
                 </Box>
             </Box>
-            <Box sx={{ mb: 4 }}>
-                <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold' }}>
-                    Settings
-                </Typography>
-                <Box sx={{ mb: 4, display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 30%' }}>
-                        <Typography variant="h6" sx={{ mb: 1 }}>
-                            Buying Power Usage
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <Slider
-                                value={buyingPower}
-                                onChange={(value) => handleSliderChange(value, setBuyingPower)}
-                                min={1}
-                                max={100}
-                                step={1}
-                                marks
-                                tipFormatter={(value) => `${value}%`}
-                                trackStyle={{ backgroundColor: '#1976d2' }}
-                                handleStyle={{ borderColor: '#1976d2' }}
-                                railStyle={{ backgroundColor: '#90caf9' }}
-                                sx={{ flex: 1 }}
-                            />
-                            <TextField
-                                label="Buying Power (%)"
-                                value={`${buyingPower}%`}
-                                variant="outlined"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                                sx={{ width: 80 }}
-                            />
-                        </Box>
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 30%' }}>
-                        <Typography variant="h6" sx={{ mb: 1 }}>
-                            Max S&P Exposure
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <Slider
-                                value={maxSPExposure}
-                                onChange={(value) => handleSliderChange(value, setMaxSPExposure)}
-                                min={0}
-                                max={100}
-                                step={1}
-                                marks
-                                tipFormatter={(value) => `${value}%`}
-                                trackStyle={{ backgroundColor: '#1976d2' }}
-                                handleStyle={{ borderColor: '#1976d2' }}
-                                railStyle={{ backgroundColor: '#90caf9' }}
-                                sx={{ flex: 1 }}
-                            />
-                            <TextField
-                                label="Max S&P (%)"
-                                value={`${maxSPExposure}%`}
-                                variant="outlined"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                                sx={{ width: 80 }}
-                            />
-                        </Box>
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 30%' }}>
-                        <Typography variant="h6" sx={{ mb: 1 }}>
-                            Min S&P Exposure
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <Slider
-                                value={minSPExposure}
-                                onChange={(value) => handleSliderChange(value, setMinSPExposure)}
-                                min={0}
-                                max={100}
-                                step={1}
-                                marks
-                                tipFormatter={(value) => `${value}%`}
-                                trackStyle={{ backgroundColor: '#1976d2' }}
-                                handleStyle={{ borderColor: '#1976d2' }}
-                                railStyle={{ backgroundColor: '#90caf9' }}
-                                sx={{ flex: 1 }}
-                            />
-                            <TextField
-                                label="Min S&P (%)"
-                                value={`${minSPExposure}%`}
-                                variant="outlined"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                                sx={{ width: 80 }}
-                            />
-                        </Box>
-                    </Box>
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection:'row', gap: 2 }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 50%' }}>
-                        <Typography variant="h6" sx={{ mb: 1 }}>
-                            Strangle Profit Target
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <Slider
-                                value={strangleProfitTarget}
-                                onChange={(value) => handleSliderChange(value, setStrangleProfitTarget)}
-                                min={0}
-                                max={100}
-                                step={1}
-                                marks
-                                tipFormatter={(value) => `${value}%`}
-                                trackStyle={{ backgroundColor: '#1976d2' }}
-                                handleStyle={{ borderColor: '#1976d2' }}
-                                railStyle={{ backgroundColor: '#90caf9' }}
-                                sx={{ flex: 1 }}
-                            />
-                            <TextField
-                                label="Profit Target (%)"
-                                value={`${strangleProfitTarget}%`}
-                                variant="outlined"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                                sx={{ width: 80 }}
-                            />
-                        </Box>
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 50%' }}>
-                        <Typography variant="h6" sx={{ mb: 1 }}>
-                            Strangle Stop Loss
-                        </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <Slider
-                                value={strangleStopLoss}
-                                onChange={(value) => handleSliderChange(value, setStrangleStopLoss)}
-                                min={0}
-                                max={100}
-                                step={1}
-                                marks
-                                tipFormatter={(value) => `${value}%`}
-                                trackStyle={{ backgroundColor: '#1976d2' }}
-                                handleStyle={{ borderColor: '#1976d2' }}
-                                railStyle={{ backgroundColor: '#90caf9' }}
-                                sx={{ flex: 1 }}
-                            />
-                            <TextField
-                                label="Stop Loss (%)"
-                                value={`${strangleStopLoss}%`}
-                                variant="outlined"
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                                sx={{ width: 80 }}
-                            />
-                        </Box>
-                    </Box>
-                </Box>
-            </Box>
-            <Box sx={{ mb: 4 }}>
-                <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold' }}>
-                    Categories
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-                    <TextField
-                        label="Category Name"
-                        value={newCategoryName}
-                        onChange={(e) => setNewCategoryName(e.target.value)}
-                        variant="outlined"
-                        sx={{ mr: 2, maxWidth: 300 }}
-                    />
-                    <Button variant="contained" onClick={handleAddCategory} sx={{ mr: 2, maxWidth: 100 }}>
-                        Add
-                    </Button>
-                    {categories.map((category, index) => (
-                        <Chip
-                            key={index}
-                            label={category.name}
-                            onDelete={() => handleDeleteCategory(category.name)}
-                            color="primary"
-                            sx={{ m: 0.5 }}
+            <Box sx={{ display: 'flex', gap: 4 }}>
+                {/* Left Column with Sliders */}
+                <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 30%', mr: 4, border: '1px solid #ddd', padding: 2 }}>
+                    <Typography variant="h6" sx={{ mb: 1 }}>
+                        Buying Power Usage
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                        <Slider
+                            value={buyingPower}
+                            onChange={(value) => handleSliderChange(value, setBuyingPower)}
+                            min={1}
+                            max={100}
+                            step={1}
+                            marks
+                            tipFormatter={(value) => `${value}%`}
+                            trackStyle={{ backgroundColor: '#1976d2' }}
+                            handleStyle={{ borderColor: '#1976d2' }}
+                            railStyle={{ backgroundColor: '#90caf9' }}
+                            sx={{ flex: 1 }}
                         />
-                    ))}
-                </Box>
-            </Box>
-            <Box sx={{ mb: 4 }}>
-                <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold' }}>
-                    Strategies
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-                    <TextField
-                        label="Strategy Name"
-                        value={newStrategyName}
-                        onChange={(e) => setNewStrategyName(e.target.value)}
-                        variant="outlined"
-                        sx={{ mr: 2, maxWidth: 300 }}
-                    />
-                    <Button variant="contained" onClick={handleAddStrategy} sx={{ mr: 2, maxWidth: 100 }}>
-                        Add
-                    </Button>
-                    {strategies.map((strategy, index) => (
-                        <Chip
-                            key={index}
-                            label={strategy.name}
-                            onDelete={() => handleDeleteStrategy(strategy.name)}
-                            color="secondary"
-                            sx={{ m: 0.5 }}
+                        <TextField
+                            label="Buying Power (%)"
+                            value={`${buyingPower}%`}
+                            variant="outlined"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            sx={{ width: 80 }}
                         />
-                    ))}
-                </Box>
-            </Box>
-            <Box sx={{ mb: 4 }}>
-                <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold' }}>
-                    Tags
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-                    <TextField
-                        label="New Tag"
-                        value={newTag}
-                        onChange={(e) => setNewTag(e.target.value)}
-                        variant="outlined"
-                        sx={{ mr: 2, maxWidth: 300 }}
-                    />
-                    <Button variant="contained" onClick={handleAddTag} sx={{ mr: 2, maxWidth: 100 }}>
-                        Add
-                    </Button>
-                    {tags.map((tag, index) => (
-                        <Chip
-                            key={index}
-                            label={tag}
-                            onDelete={() => handleDeleteTag(tag)}
-                            color="default"
-                            sx={{ m: 0.5 }}
+                    </Box>
+
+                    <Typography variant="h6" sx={{ mb: 1 }}>
+                        Max S&P Exposure
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                        <Slider
+                            value={maxSPExposure}
+                            onChange={(value) => handleSliderChange(value, setMaxSPExposure)}
+                            min={0}
+                            max={100}
+                            step={1}
+                            marks
+                            tipFormatter={(value) => `${value}%`}
+                            trackStyle={{ backgroundColor: '#1976d2' }}
+                            handleStyle={{ borderColor: '#1976d2' }}
+                            railStyle={{ backgroundColor: '#90caf9' }}
+                            sx={{ flex: 1 }}
                         />
-                    ))}
+                        <TextField
+                            label="Max S&P (%)"
+                            value={`${maxSPExposure}%`}
+                            variant="outlined"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            sx={{ width: 80 }}
+                        />
+                    </Box>
+
+                    <Typography variant="h6" sx={{ mb: 1 }}>
+                        Min S&P Exposure
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                        <Slider
+                            value={minSPExposure}
+                            onChange={(value) => handleSliderChange(value, setMinSPExposure)}
+                            min={0}
+                            max={100}
+                            step={1}
+                            marks
+                            tipFormatter={(value) => `${value}%`}
+                            trackStyle={{ backgroundColor: '#1976d2' }}
+                            handleStyle={{ borderColor: '#1976d2' }}
+                            railStyle={{ backgroundColor: '#90caf9' }}
+                            sx={{ flex: 1 }}
+                        />
+                        <TextField
+                            label="Min S&P (%)"
+                            value={`${minSPExposure}%`}
+                            variant="outlined"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            sx={{ width: 80 }}
+                        />
+                    </Box>
+
+                    <Typography variant="h6" sx={{ mb: 1 }}>
+                        Strangle Profit Target
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                        <Slider
+                            value={strangleProfitTarget}
+                            onChange={(value) => handleSliderChange(value, setStrangleProfitTarget)}
+                            min={0}
+                            max={100}
+                            step={1}
+                            marks
+                            tipFormatter={(value) => `${value}%`}
+                            trackStyle={{ backgroundColor: '#1976d2' }}
+                            handleStyle={{ borderColor: '#1976d2' }}
+                            railStyle={{ backgroundColor: '#90caf9' }}
+                            sx={{ flex: 1 }}
+                        />
+                        <TextField
+                            label="Profit Target (%)"
+                            value={`${strangleProfitTarget}%`}
+                            variant="outlined"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            sx={{ width: 80 }}
+                        />
+                    </Box>
+
+                    <Typography variant="h6" sx={{ mb: 1 }}>
+                        Strangle Stop Loss
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Slider
+                            value={strangleStopLoss}
+                            onChange={(value) => handleSliderChange(value, setStrangleStopLoss)}
+                            min={0}
+                            max={100}
+                            step={1}
+                            marks
+                            tipFormatter={(value) => `${value}%`}
+                            trackStyle={{ backgroundColor: '#1976d2' }}
+                            handleStyle={{ borderColor: '#1976d2' }}
+                            railStyle={{ backgroundColor: '#90caf9' }}
+                            sx={{ flex: 1 }}
+                        />
+                        <TextField
+                            label="Stop Loss (%)"
+                            value={`${strangleStopLoss}%`}
+                            variant="outlined"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            sx={{ width: 80 }}
+                        />
+                    </Box>
+                </Box>
+
+                {/* Right Column with Categories, Strategies, and Tags */}
+                <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 70%', border: '1px solid #ddd', padding: 2 }}>
+                    <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold' }}>
+                        Categories
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1, mb: 4 }}>
+                        <TextField
+                            label="Category Name"
+                            value={newCategoryName}
+                            onChange={(e) => setNewCategoryName(e.target.value)}
+                            variant="outlined"
+                            sx={{ mr: 2, maxWidth: 300 }}
+                        />
+                        <Button variant="contained" onClick={handleAddCategory} sx={{ mr: 2, maxWidth: 100 }}>
+                            Add
+                        </Button>
+                        {categories.map((category, index) => (
+                            <Chip
+                                key={index}
+                                label={category.name}
+                                onDelete={() => handleDeleteCategory(category.name)}
+                                color="primary"
+                                sx={{ m: 0.5 }}
+                            />
+                        ))}
+                    </Box>
+
+                    <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold' }}>
+                        Strategies
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1, mb: 4 }}>
+                        <TextField
+                            label="Strategy Name"
+                            value={newStrategyName}
+                            onChange={(e) => setNewStrategyName(e.target.value)}
+                            variant="outlined"
+                            sx={{ mr: 2, maxWidth: 300 }}
+                        />
+                        <Button variant="contained" onClick={handleAddStrategy} sx={{ mr: 2, maxWidth: 100 }}>
+                            Add
+                        </Button>
+                        {strategies.map((strategy, index) => (
+                            <Chip
+                                key={index}
+                                label={strategy.name}
+                                onDelete={() => handleDeleteStrategy(strategy.name)}
+                                color="secondary"
+                                sx={{ m: 0.5 }}
+                            />
+                        ))}
+                    </Box>
+
+                    <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold' }}>
+                        Tags
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                        <TextField
+                            label="New Tag"
+                            value={newTag}
+                            onChange={(e) => setNewTag(e.target.value)}
+                            variant="outlined"
+                            sx={{ mr: 2, maxWidth: 300 }}
+                        />
+                        <Button variant="contained" onClick={handleAddTag} sx={{ mr: 2, maxWidth: 100 }}>
+                            Add
+                        </Button>
+                        {tags.map((tag, index) => (
+                            <Chip
+                                key={index}
+                                label={tag}
+                                onDelete={() => handleDeleteTag(tag)}
+                                color="default"
+                                sx={{ m: 0.5 }}
+                            />
+                        ))}
+                    </Box>
                 </Box>
             </Box>
+
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                 {changesMade && (
                     <Button
