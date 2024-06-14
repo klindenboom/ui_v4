@@ -15,18 +15,22 @@ import { useTheme } from '@mui/material/styles';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { GlobalTradeDataContext } from 'contexts/GlobalTradeDataContext';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 
 const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag, createTradeGroup }) => {
     const methods = useForm();
     const [tags, setTags] = useState([]);
     const [newTag, setNewTag] = useState('');
     const theme = useTheme();
-    const { accountSettings, setAccountSettings } = useContext(GlobalTradeDataContext);
+    const { accountSettings, setAccountSettingsState } = useContext(GlobalTradeDataContext);
+    const [selectedTrades, setSelectedTrades] = useState([]);
 
     const resetForm = () => {
         methods.reset();
         setTags([]);
         setNewTag('');
+        setSelectedTrades([]);
     };
 
     useEffect(() => {
@@ -36,7 +40,15 @@ const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag
     }, [open]);
 
     const onSubmit = async (data) => {
-        await createTradeGroup({ name: data.name, underlying: data.underlying, type: data.type, category: data.category, tags });
+        await createTradeGroup({
+            name: data.name,
+            underlying: data.underlying,
+            type: data.type,
+            category: data.category,
+            tags,
+            comments: data.comments,
+            tradeIds: selectedTrades,
+        });
         handleClose();
     };
 
@@ -48,8 +60,10 @@ const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag
     const handleAddNewTag = async () => {
         if (newTag && !availableTags.includes(newTag) && !accountSettings?.tags.includes(newTag)) {
             const updatedTags = [...(accountSettings?.tags || []), newTag];
-            const updatedSettings = { ...accountSettings, tags: updatedTags };
-            await setAccountSettings(updatedSettings);
+            setAccountSettingsState(prevSettings => ({
+                ...prevSettings,
+                tags: updatedTags
+            }));
             handleAddTag(newTag); // Call the existing handleAddTag function
         }
         setNewTag('');
@@ -66,6 +80,7 @@ const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Create a New Open Trade Group</DialogTitle>
+            <Divider sx={{ borderColor: theme.palette.success.main }} />
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
                     <DialogContent>
@@ -102,21 +117,39 @@ const NewTradeGroupForm = ({ open, handleClose, availableTags = [], handleAddTag
                                     ))}
                                 </Select>
                             </FormControl>
-                            <TextField
-                                label="New Tag"
-                                value={newTag}
-                                onChange={(e) => setNewTag(e.target.value)}
-                                onKeyPress={(e) => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault();
-                                        handleAddNewTag();
-                                    }
-                                }}
-                                fullWidth
-                            />
-                            <Button onClick={handleAddNewTag} variant="contained" color="primary">
-                                Add Tag
-                            </Button>
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel>Assign Trades</InputLabel>
+                                <Select
+                                    multiple
+                                    value={selectedTrades}
+                                    onChange={(e) => setSelectedTrades(e.target.value)}
+                                    renderValue={(selected) => selected.join(', ')}
+                                >
+                                    {accountSettings?.trades?.map((trade) => (
+                                        <MenuItem key={trade._id} value={trade._id}>
+                                            {trade.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <TextField label="Comments" {...methods.register("comments")} multiline rows={4} />
+                            <Box display="flex" alignItems="center" gap={1}>
+                                <TextField
+                                    label="New Tag"
+                                    value={newTag}
+                                    onChange={(e) => setNewTag(e.target.value)}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            handleAddNewTag();
+                                        }
+                                    }}
+                                    fullWidth
+                                />
+                                <Button onClick={handleAddNewTag} variant="contained" color="primary" sx={{ minWidth: '125px' }}>
+                                    Add Tag
+                                </Button>
+                            </Box>
                             <FormControl fullWidth>
                                 <InputLabel>Tags</InputLabel>
                                 <Select

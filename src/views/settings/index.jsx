@@ -69,7 +69,7 @@ const Settings = () => {
             setSnackbarOpen(true);
             return;
         }
-        const updatedCategories = [...categories, { name: newCategoryName }];
+        const updatedCategories = [...categories, { name: newCategoryName, value: newCategoryName }];
         setCategories(updatedCategories);
         setNewCategoryName('');
         setChangesMade(true);
@@ -81,7 +81,7 @@ const Settings = () => {
             setSnackbarOpen(true);
             return;
         }
-        const updatedStrategies = [...strategies, { name: newStrategyName }];
+        const updatedStrategies = [...strategies, { name: newStrategyName, value: newStrategyName }];
         setStrategies(updatedStrategies);
         setNewStrategyName('');
         setChangesMade(true);
@@ -194,6 +194,9 @@ const Settings = () => {
             <Box sx={{ display: 'flex', gap: 4 }}>
                 {/* Left Column with Sliders */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 30%', mr: 4, border: '1px solid #ddd', padding: 2 }}>
+                    <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold', textAlign: 'center' }}>
+                        Targets
+                    </Typography>
                     <Typography variant="h6" sx={{ mb: 1 }}>
                         Buying Power Usage
                     </Typography>
@@ -337,6 +340,9 @@ const Settings = () => {
 
                 {/* Right Column with Categories, Strategies, and Tags */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 70%', border: '1px solid #ddd', padding: 2 }}>
+                    <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold', textAlign: 'center' }}>
+                        Analytics
+                    </Typography>
                     <Typography variant="h5" sx={{ mb: 1, fontWeight: 'bold' }}>
                         Categories
                     </Typography>

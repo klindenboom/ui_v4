@@ -21,11 +21,13 @@ import DraggableTradeCard from '../../components/DraggableTradeCard';
 import NewTradeGroupForm from '../../components/NewTradeGroupForm';
 import TradeDetailDialog from '../../components/TradeDetailDialog';
 import DatePicker from 'react-datepicker';
+import { parseTradeData } from '../../utils/mappers';
 import 'react-datepicker/dist/react-datepicker.css';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Chip from '@mui/material/Chip';
+import Checkbox from '@mui/material/Checkbox';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -51,6 +53,8 @@ const TradeGrouping = () => {
   const [dateFilter, setDateFilter] = useState(null);
   const [availableTags, setAvailableTags] = useState([]);
   const [tagFilter, setTagFilter] = useState([]);
+  const [selectedTrades, setSelectedTrades] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const greenColor = '#009688';
 
@@ -160,6 +164,30 @@ const TradeGrouping = () => {
   const uniqueUnderlyingSymbols = [...new Set(trades.map(trade => trade.uiData.underlyingSymbol))].sort();
   const uniqueUnderlyingTypes = [...new Set(trades.map(trade => trade.uiData.underlyingType))];
 
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedTrades([]);
+    } else {
+      setSelectedTrades(filteredTrades.map(trade => trade._id));
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const handleTradeSelect = (tradeId) => {
+    setSelectedTrades(prevSelected =>
+      prevSelected.includes(tradeId)
+        ? prevSelected.filter(id => id !== tradeId)
+        : [...prevSelected, tradeId]
+    );
+  };
+
+  const handleAssignSelectedToGroup = async (groupId) => {
+    await Promise.all(selectedTrades.map(tradeId => assignTradeToGroup(groupId, tradeId)));
+    await fetchTradeGroupsAndTrades();
+    setSelectedTrades([]);
+    setSelectAll(false);
+  };
+
   return (
     <Box sx={{ flexGrow: 1, padding: 0 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 1, width: '100%', alignItems: 'center' }}>
@@ -202,6 +230,10 @@ const TradeGrouping = () => {
             isClearable
             customInput={<TextField label="Select Date" fullWidth />}
           />
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Checkbox checked={selectAll} onChange={handleSelectAll} />
+            <Typography>Select All</Typography>
+          </Box>
           <Tooltip title="Add New Trade Group">
             <IconButton
               color="primary"
@@ -217,49 +249,44 @@ const TradeGrouping = () => {
           </Tooltip>
         </Box>
       </Box>
-      {/* <FormControl sx={{ width: 300, marginBottom: 2 }}>
-        <InputLabel>Tags</InputLabel>
-        <Select
-          multiple
-          value={tagFilter}
-          onChange={handleTagChange}
-          input={<OutlinedInput label="Tags" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.length > 0 ? selected.map((value) => (
-                <Chip key={value} label={value} />
-              )) : <Chip label="All Tags" />}
-            </Box>
-          )}
-          MenuProps={MenuProps}
-        >
-          {availableTags.map((tag) => (
-            <MenuItem key={tag} value={tag}>
-              {tag}
+      {(selectAll || selectedTrades.length > 0) && (
+        <Box sx={{ marginBottom: 2 }}>
+          <Select
+            sx={{ width: '200px' }}
+            defaultValue=""
+            onChange={(e) => handleAssignSelectedToGroup(e.target.value)}
+            displayEmpty
+          >
+            <MenuItem value="">
+              <em>Assign Selected to Group</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl> */}
+            {tradeGroups.map((group) => (
+              <MenuItem key={group._id} value={group._id}>
+                {group.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+      )}
       <Grid container spacing={1}>
-        <Grid item xs={12}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '4px 0', borderBottom: '1px solid white' }}>
-            <Typography variant="subtitle1" color={greenColor} sx={{ flex: 1, textAlign: 'left' }}>Symbol</Typography>
-            <Typography variant="subtitle1" color={greenColor} sx={{ flex: 1, textAlign: 'left' }}>Date</Typography>
-            <Typography variant="subtitle1" color={greenColor} sx={{ flex: 1, textAlign: 'left' }}>Count</Typography>
-            <Typography variant="subtitle1" color={greenColor} sx={{ flex: 1, textAlign: 'left' }}>Total Price</Typography>
-            <Typography variant="subtitle1" color={greenColor} sx={{ flex: 1, textAlign: 'left' }}>Group</Typography>
-          </Box>
+        <Grid item xs={12} sx={{ width: '100%' }}>
           {filteredTrades.map((trade) => (
-            <DraggableTradeCard
-              key={trade._id}
-              trade={trade}
-              tradeGroups={tradeGroups}
-              handleAssignTradeToGroup={handleAssignTradeToGroup}
-              handleDetailOpen={handleDetailOpen}
-              handleEditTrade={handleEditTrade}
-              handleDeleteTrade={handleDeleteTrade}
-              sx={{ width: '100%', marginBottom: 1 }}
-            />
+            <Box key={trade._id} sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+              <DraggableTradeCard
+                trade={trade}
+                tradeGroups={tradeGroups}
+                handleAssignTradeToGroup={handleAssignTradeToGroup}
+                handleDetailOpen={handleDetailOpen}
+                handleEditTrade={handleEditTrade}
+                handleDeleteTrade={handleDeleteTrade}
+                tradeStrings={parseTradeData(trade)}
+                sx={{ flex: 1, marginBottom: 1, width: '100%' }}
+              />
+              <Checkbox
+                checked={selectedTrades.includes(trade._id)}
+                onChange={() => handleTradeSelect(trade._id)}
+              />
+            </Box>
           ))}
         </Grid>
       </Grid>

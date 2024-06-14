@@ -59,9 +59,10 @@ const Dashboard = () => {
         }
 
         const marginResponse = await getAccountMargin();
-        const cbp = marginResponse[0].marginData.groups.reduce((sum, group) => sum + parseFloat(group['buying-power']), 0);
+        const marginGroups = marginResponse[0]?.marginData?.groups ?? [];
+        const cbp = marginGroups.reduce((sum, group) => sum + parseFloat(group['buying-power']), 0);
         setCumulativeBuyingPower(cbp);
-        const groups = marginResponse[0].marginData.groups.map(group => ({
+        const groups = marginGroups.map(group => ({
           ...group,
           netLiqPercentage: (parseFloat(group['buying-power']) / recentBalance) * 100,
           deployedPercentage: (parseFloat(group['buying-power']) / cbp) * 100,
@@ -161,7 +162,10 @@ const Dashboard = () => {
   };
 
   const generateTradeGroupData = (tradeGroups) => {
-    debugger;
+    if (!tradeGroups || !Array.isArray(tradeGroups)) {
+      return [];
+    }
+
     const categoryCounts = tradeGroups.reduce((acc, group) => {
       if (group.category in acc) {
         acc[group.category]++;
@@ -182,9 +186,11 @@ const Dashboard = () => {
   const sortedMarginData = [...marginData].sort((a, b) => parseFloat(b['buying-power']) - parseFloat(a['buying-power']));
   const treeMapLabels = sortedMarginData.map(group => group.description);
   const treeMapData = sortedMarginData.map(group => group.deployedPercentage.toFixed(1));
- if (loading) {
-  return <h2>Loading...</h2>;
- }
+
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
+
   return (
     <Container maxWidth={false} sx={{ width: '100%', height: "100%", padding: 0 }}>
       <ToggleButtonGroup
@@ -251,8 +257,8 @@ const Dashboard = () => {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              minHeight: '200px',
-              minWidth: '300px',
+              minHeight: '125px',
+              minWidth: '150px',
               padding: 2,
               border: '1px solid #ccc',
               borderRadius: '8px'
@@ -271,8 +277,8 @@ const Dashboard = () => {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              minHeight: '200px',
-              minWidth: '300px',
+              minHeight: '125px',
+              minWidth: '150px',
               padding: 2,
               border: '1px solid #ccc',
               borderRadius: '8px'
@@ -282,10 +288,10 @@ const Dashboard = () => {
               Realized P/L YTD
             </Typography>
             <Typography variant="h4" gutterBottom>
-              {`$${(recentBalance - accountSettings.startingAccountValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+              {`$${(recentBalance - (accountSettings?.startingAccountValue ?? 0)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
             </Typography>
             <Typography variant="h4" gutterBottom color={green[500]}>
-              <ArrowUpward style={{ verticalAlign: 'middle' }} />{`${((accountSettings.startingAccountValue / recentBalance) * 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`}
+              <ArrowUpward style={{ verticalAlign: 'middle' }} />{`${(((accountSettings?.startingAccountValue ?? 0) / recentBalance) * 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`}
             </Typography>
           </Box>
         </Grid>
@@ -296,8 +302,8 @@ const Dashboard = () => {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              minHeight: '200px',
-              minWidth: '300px',
+              minHeight: '125px',
+              minWidth: '150px',
               padding: 2,
               border: '1px solid #ccc',
               borderRadius: '8px'
@@ -316,8 +322,8 @@ const Dashboard = () => {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              minHeight: '200px',
-              minWidth: '300px',
+              minHeight: '125px',
+              minWidth: '150px',
               padding: 2,
               border: '1px solid #ccc',
               borderRadius: '8px'

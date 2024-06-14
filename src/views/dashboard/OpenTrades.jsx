@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
@@ -20,9 +17,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import NewTradeGroupForm from '../../components/NewTradeGroupForm';
 import TradeDetailDialog from '../../components/TradeDetailDialog';
 import { getTradeGroups, updateTradeGroup, createTradeGroup } from '../../services/api';
-import { GlobalTradeDataContext } from 'contexts/GlobalTradeDataContext';
-import DraggableTradeCard from '../../components/DraggableTradeCard';
+import { GlobalTradeDataContext } from '../../contexts/GlobalTradeDataContext';
 import { calculateTotalPrice } from '../../utils/mappers';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -68,7 +71,7 @@ const getPLColor = (value) => {
 };
 
 const OpenTrades = () => {
-  const { accountSettings } = useContext(GlobalTradeDataContext);
+  const { accountSettings, setAccountSettingsState } = useContext(GlobalTradeDataContext);
   const [tradeGroups, setTradeGroups] = useState([]);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
@@ -239,12 +242,24 @@ const OpenTrades = () => {
           </Tooltip>
         </Box>
         {tradeGroups.length > 0 ? (
-          <Grid container spacing={2}>
-            {filteredTradeGroups.map((group, index) => (
-              <Grid item xs={12} md={6} key={index} sx={{ paddingBottom: '16px' }}>
-                <Card sx={{ margin: 0 }}>
-                  <CardContent sx={{ padding: '8px', '&:last-child': { paddingBottom: '8px' } }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Group Name</TableCell>
+                  <TableCell>Underlying</TableCell>
+                  <TableCell>Open Date</TableCell>
+                  <TableCell>Last Trade Date</TableCell>
+                  <TableCell>Number of Trades</TableCell>
+                  <TableCell>Total P/L</TableCell>
+                  <TableCell>Tags</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredTradeGroups.map((group, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
                       {editedGroup && editedGroup._id === group._id ? (
                         <TextField
                           name="name"
@@ -256,62 +271,26 @@ const OpenTrades = () => {
                         />
                       ) : (
                         <Typography
-                          variant="h4"
-                          component="div"
+                          variant="h6"
                           sx={{
                             color: group.isClosed ? '#8d8b8b' : '#029688',
-                            fontSize: '1.5rem'
+                            fontSize: '1rem'
                           }}
                           onClick={() => handleEdit(group)}
                         >
                           {group.name}
                         </Typography>
                       )}
-                    </Box>
-                    <Box sx={{ paddingLeft: '6px' }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="body2">
-                          Underlying:
-                        </Typography>
-                        <Typography variant="body2" sx={{ textAlign: 'right' }}>
-                          {group.underlying}
-                        </Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="body2" color="textSecondary">
-                          Open Date:
-                        </Typography>
-                        <Typography variant="body2" sx={{ textAlign: 'right' }}>
-                          {calculateOldestTradeDate(group.tradeHistory)}
-                        </Typography>
-                      </Box>
-                      {group.tradeHistory.length > 0 && (
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                          <Typography variant="body2" color="textSecondary">
-                            Last Trade Date:
-                          </Typography>
-                          <Typography variant="body2" sx={{ textAlign: 'right' }}>
-                            {calculateMostRecentTradeDate(group.tradeHistory)}
-                          </Typography>
-                        </Box>
-                      )}
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="body2" color="textSecondary">
-                          Number of Trades:
-                        </Typography>
-                        <Typography variant="body2" sx={{ textAlign: 'right' }}>
-                          {group.tradeHistory.length}
-                        </Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="body2" color="textSecondary">
-                          Total P/L:
-                        </Typography>
-                        <Typography variant="body2" sx={{ textAlign: 'right', color: getPLColor(calculateTotalPrice(group)) }}>
-                          {formatAsCurrency(calculateTotalPrice(group))}
-                        </Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 2 }}>
+                    </TableCell>
+                    <TableCell>{group.underlying}</TableCell>
+                    <TableCell>{calculateOldestTradeDate(group.tradeHistory)}</TableCell>
+                    <TableCell>{group.tradeHistory.length > 0 ? calculateMostRecentTradeDate(group.tradeHistory) : 'N/A'}</TableCell>
+                    <TableCell>{group.tradeHistory.length}</TableCell>
+                    <TableCell sx={{ color: getPLColor(calculateTotalPrice(group)) }}>
+                      {calculateTotalPrice(group)}
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                         {group.tags.map((tag) => (
                           <Chip
                             key={tag}
@@ -329,41 +308,41 @@ const OpenTrades = () => {
                           />
                         )}
                       </Box>
-                    </Box>
-                  </CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', padding: 1 }}>
-                    <Tooltip title="View Details">
-                      <IconButton color="inherit" onClick={() => handleDetailOpen(group)}>
-                        <SearchIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title={group.isClosed ? "Reopen Trade" : "Close Trade"}>
-                      <IconButton aria-label="close" onClick={() => handleToggleClose(group)}>
-                        {group.isClosed ? <OpenInNewIcon /> : <CloseIcon />}
-                      </IconButton>
-                    </Tooltip>
-                    {editedGroup && editedGroup._id === group._id && (
-                      <>
-                        <IconButton
-                          color="primary"
-                          onClick={() => handleSave(editedGroup)}
-                          disabled={!hasChanges}
-                        >
-                          <SaveIcon />
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip title="View Details">
+                        <IconButton color="inherit" onClick={() => handleDetailOpen(group)}>
+                          <SearchIcon />
                         </IconButton>
-                        <IconButton
-                          color="secondary"
-                          onClick={handleUndo}
-                        >
-                          <UndoIcon />
+                      </Tooltip>
+                      <Tooltip title={group.isClosed ? "Reopen Trade" : "Close Trade"}>
+                        <IconButton aria-label="close" onClick={() => handleToggleClose(group)}>
+                          {group.isClosed ? <OpenInNewIcon /> : <CloseIcon />}
                         </IconButton>
-                      </>
-                    )}
-                  </Box>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+                      </Tooltip>
+                      {editedGroup && editedGroup._id === group._id && (
+                        <>
+                          <IconButton
+                            color="primary"
+                            onClick={() => handleSave(editedGroup)}
+                            disabled={!hasChanges}
+                          >
+                            <SaveIcon />
+                          </IconButton>
+                          <IconButton
+                            color="secondary"
+                            onClick={handleUndo}
+                          >
+                            <UndoIcon />
+                          </IconButton>
+                        </>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         ) : (
           <Typography>Loading...</Typography>
         )}

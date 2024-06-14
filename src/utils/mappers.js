@@ -17,7 +17,7 @@ const getTimeIntervals = () => {
   }
 
   return timeIntervals;
-}
+};
 
 const tooltipLabelFormatter = (tooltipItem, data, pointLabels) => {
   const dataIndex = tooltipItem.dataIndex;
@@ -29,81 +29,142 @@ const tooltipLabelFormatter = (tooltipItem, data, pointLabels) => {
 };
 
 // Calculate total P/L by Date
-const calculateTotalPLByDate = () => {
+const calculateTotalPLByDate = (data) => {
   let totalPLByDate = {};
 
   data.forEach(entry => {
-      if (!totalPLByDate[entry.Date]) {
-          totalPLByDate[entry.Date] = 0;
-      }
-      totalPLByDate[entry.Date] += entry.Value; // assuming 'Value' is the key for P/L
+    if (!totalPLByDate[entry.Date]) {
+      totalPLByDate[entry.Date] = 0;
+    }
+    totalPLByDate[entry.Date] += entry.Value; // assuming 'Value' is the key for P/L
   });
 
   return Object.keys(totalPLByDate).map(date => ({ date, totalPL: totalPLByDate[date] }));
 };
 
-  //TODO get from common file
-  const extractPriceCode = (stockSymbol) => {
-    // The regex looks for 'P' or 'C', optionally followed by '0', and then captures 4 digits.
-    const regex = /[PC]0?(\d{4,})/; // Assuming the strike price is always at least 4 digits.
-    const match = stockSymbol.match(regex);
-    if (match) return match[1]; // Returns the captured group of digits.
-    else return stockSymbol; // Returns the original symbol if no match is found.
+const extractPriceCode = (stockSymbol) => {
+  const regex = /[PC]0?(\d{4,})/;
+  const match = stockSymbol.match(regex);
+  if (match) return match[1];
+  else return stockSymbol;
+};
+
+const extractDate = (stockSymbol) => {
+  const pIndex = stockSymbol.indexOf('P0') || stockSymbol.indexOf('P');
+  const cIndex = stockSymbol.indexOf('C0') || stockSymbol.indexOf('C');
+  let expirationDate;
+
+  if (pIndex !== -1) {
+    expirationDate = stockSymbol.substring(pIndex - 6, pIndex);
+  } else if (cIndex !== -1) {
+    expirationDate = stockSymbol.substring(cIndex - 6, cIndex);
+  } else {
+    return '';
   }
+  expirationDate = expirationDate.substr(2, 2) + '/' + expirationDate.substr(4, 2) + '/' + expirationDate.substr(0, 2);
+  console.log("expirationDate >> ", expirationDate);
+  return expirationDate;
+};
 
-  const extractDate = (stockSymbol) => {
-    // The regex looks for 'P0' or 'C0' followed by 4 digits.
-    // Assuming 'P' or 'C' always follows the date
-    //./GCM4 OGK4  240425P1860
-    const pIndex = stockSymbol.indexOf('P0') || stockSymbol.indexOf('P');
-    const cIndex = stockSymbol.indexOf('C0') || stockSymbol.indexOf('C');
-    let expirationDate;
-
-    // Determine whether 'P' or 'C' was found and calculate the start index accordingly
-    if (pIndex !== -1) {
-      expirationDate = stockSymbol.substring(pIndex - 6, pIndex);
-    } else if (cIndex !== -1) {
-      expirationDate = stockSymbol.substring(cIndex - 6, cIndex);
-    } else {//if (instrumentType === 'Future'){
-      return '';
-    }
-    expirationDate = expirationDate.substr(2, 2) + '/' + expirationDate.substr(4, 2) + '/' + expirationDate.substr(0, 2);
-    console.log("expirationDate >> ", expirationDate);
-    return expirationDate;
+const calculateTotalPrice = (group) => {
+  debugger;
+  if (!group.tradeHistory || group.tradeHistory.length === 0) {
+    return 0;
   }
-
-  const calculateTotalPrice = (group) => {
-    if (!group.tradeHistory || group.tradeHistory.length === 0) {
-      return 0;
+  let isEquityOption = false;
+  const totalValue = group.tradeHistory.reduce((total, trade) => {
+    if (!trade.uiData || !trade.uiData.legs) {
+      return total;
     }
-    
-    return group.tradeHistory.reduce((total, trade) => {
-      if (!trade.uiData || !trade.uiData.legs) {
-        return total;
+    if (trade.uiData.underlyingType === 'Equity'  && !!trade.uiData.legs[0].strikeType) {
+      isEquityOption = true;
+    }
+    return total + trade.uiData.legs.reduce((legTotal, leg) => {
+      if (!leg.fills) {
+        return legTotal;
       }
-  
-      return total + trade.uiData.legs.reduce((legTotal, leg) => {
-        if (!leg.fills) {
-          return legTotal;
-        }
-  
-        return legTotal + leg.fills.reduce((fillTotal, fill) => {
-          const price = parseFloat(fill.price);
-          const adjustedPrice = 
-            leg.action === 'sellToOpen' || leg.action === 'sellToClose' ? price : -price;
-          return fillTotal + (fill.fillCount * adjustedPrice * 100);
-        }, 0);
-      }, 0);
-    }, 0).toFixed(2);
-  };
-  
-  
-export  {
-    getTimeIntervals,
-    tooltipLabelFormatter,
-    calculateTotalPLByDate,
-    extractPriceCode,
-    extractDate,
-    calculateTotalPrice,
-}
 
+      return legTotal + leg.fills.reduce((fillTotal, fill) => {
+        const price = parseFloat(fill.price);
+        const adjustedPrice = leg.action === 'sellToOpen' || leg.action === 'sellToClose' ? price : -price;
+        return fillTotal + (fill.fillCount * adjustedPrice);
+      }, 0);
+    }, 0);
+  }, 0).toFixed(2);
+  if (isEquityOption) {
+    return (totalValue * 100);
+  }
+  return (totalValue)
+};
+
+const extractExpirationDate = (symbol) => {
+  const regex = /\d{6}/;
+  const match = symbol.match(regex);
+  if (match) {
+    const dateStr = match[0];
+    const year = dateStr.substring(0, 2);
+    const month = dateStr.substring(2, 4);
+    const day = dateStr.substring(4, 6);
+    return `20${year}-${month}-${day}`;
+  }
+  return null;
+};
+
+const parseTradeData = (trade) => {
+  if (!trade || !trade.uiData || !trade.uiData.legs) {
+    console.log("Invalid trade data");
+    return [];
+  }
+
+  const data = trade.uiData;
+  const tradeStrings = [];
+
+  data.legs.forEach(leg => {
+    let actionString = '';
+    let actionLabel = '';
+    if (leg.action === 'buyToOpen' || leg.action === 'buyToClose') {
+      actionString = `+`;
+      actionLabel = leg.action === 'buyToOpen' ? 'BTO' : 'BTC';
+    } else if (leg.action === 'sellToOpen' || leg.action === 'sellToClose' || leg.action === 'sell' || leg.action === 'buy') {
+      actionString = `-`;
+      actionLabel = leg.action === 'sellToOpen' ? 'STO' : leg.action === 'sellToClose' ? 'STC' : leg.action === 'sell' ? 'STO' : 'BTC';
+    } else {
+      console.log("unidentified trade type");
+      return;
+    }
+
+    const combinedString = `${actionString}${leg.legCount}`;
+    const legStrings = [combinedString, actionLabel];
+
+    if (leg.strikeType) {
+      const expiration = leg.expiration;
+      let strikePrice = leg.strikePrice;
+
+      if (data.underlyingType === "Equity") {
+        // Remove exactly three trailing zeros
+        strikePrice = strikePrice.endsWith('000') ? strikePrice.slice(0, -3) : strikePrice;
+      }
+
+      const strikeType = leg.strikeType;
+      legStrings.push(expiration);
+      legStrings.push(strikePrice);
+      legStrings.push(strikeType);
+    }
+
+    tradeStrings.push(legStrings);
+  });
+
+  return tradeStrings;
+};
+
+
+
+export {
+  getTimeIntervals,
+  tooltipLabelFormatter,
+  calculateTotalPLByDate,
+  extractPriceCode,
+  extractDate,
+  calculateTotalPrice,
+  parseTradeData,
+};
